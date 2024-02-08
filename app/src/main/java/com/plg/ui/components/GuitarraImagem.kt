@@ -16,7 +16,7 @@ import com.plg.R
 
 
 @Composable
-fun Guitarra(corpo: Int, braco: Int) {
+fun GuitarraImagem(corpo: Int, braco: Int) { 
     Box(
         modifier = Modifier
             .wrapContentWidth()
@@ -44,7 +44,7 @@ fun Guitarra(corpo: Int, braco: Int) {
 @Preview(showBackground = true)
 @Composable
 fun GuitarraPreview() {
-    Guitarra(
+    GuitarraImagem(
         corpo = R.drawable.corpo_sunburst_strato,
         braco = R.drawable.braco_escuro_strato
     )
