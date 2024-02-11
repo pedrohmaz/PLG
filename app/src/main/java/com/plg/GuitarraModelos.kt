@@ -10,57 +10,57 @@ enum class GuitarraBracos {
     Escuro
 }
 
-enum class GuitarraCores {
-    Vermelho,
-    Verde,
-    Creme,
-    Sunburst
-}
-
 var modeloGuit = GuitarraModelos.Strato
 var bracoGuit = GuitarraBracos.Escuro
-var corGuit = GuitarraCores.Sunburst
 
 fun escolherFotoBraco(): Int {
-
     return when (modeloGuit) {
-        GuitarraModelos.Strato -> {
-            when (bracoGuit) {
-                GuitarraBracos.Claro -> R.drawable.braco_claro_strato
-                GuitarraBracos.Escuro -> R.drawable.braco_escuro_strato
-            }
-        }
-
-        GuitarraModelos.Tele -> {
-            when (bracoGuit) {
-                GuitarraBracos.Claro -> R.drawable.braco_claro_tele
-                GuitarraBracos.Escuro -> R.drawable.braco_escuro_tele
-            }
+        GuitarraModelos.Strato -> R.drawable.strato_braco
+        GuitarraModelos.Tele -> R.drawable.tele_braco
         }
     }
 
-}
 
 fun escolherFotoCorpo(): Int {
-
     return when (modeloGuit) {
-        GuitarraModelos.Strato -> {
-            when (corGuit) {
-                GuitarraCores.Vermelho -> R.drawable.corpo_vermelho_strato
-                GuitarraCores.Verde -> R.drawable.corpo_verde_strato
-                GuitarraCores.Creme -> R.drawable.corpo_creme_strato
-                GuitarraCores.Sunburst -> R.drawable.corpo_sunburst_strato
-            }
-        }
-
-        GuitarraModelos.Tele -> {
-            when (corGuit) {
-                GuitarraCores.Vermelho -> R.drawable.corpo_vermelho_tele
-                GuitarraCores.Verde -> R.drawable.corpo_verde_tele
-                GuitarraCores.Creme -> R.drawable.corpo_creme_tele
-                GuitarraCores.Sunburst -> R.drawable.corpo_sunburst_tele
-            }
-        }
-
+        GuitarraModelos.Strato -> R.drawable.strato_corpo
+        GuitarraModelos.Tele -> R.drawable.tele_corpo
     }
+}
+
+fun escolherFotoHeadstock(): Int {
+    return when (modeloGuit) {
+        GuitarraModelos.Strato -> R.drawable.strato_headstock
+        GuitarraModelos.Tele -> R.drawable.tele_headstock
+    }
+}
+
+fun escolherFotoMarcacoes(): Int {
+    return when (modeloGuit) {
+        GuitarraModelos.Strato -> R.drawable.strato_marcacoes
+        GuitarraModelos.Tele -> R.drawable.tele_marcacoes
+    }
+}
+
+fun escolherFotoEscudo(): Int {
+    return when (modeloGuit) {
+        GuitarraModelos.Strato -> R.drawable.strato_escudo
+        GuitarraModelos.Tele -> R.drawable.tele_escudo
+    }
+}
+
+fun escolherFotoPecas(): Int {
+    return when (modeloGuit) {
+        GuitarraModelos.Strato -> R.drawable.strato_pecas
+        GuitarraModelos.Tele -> R.drawable.tele_pecas
+    }
+}
+
+fun desenharGuitarra() : List<Int>  {
+    return listOf( escolherFotoCorpo(),
+            escolherFotoBraco(),
+            escolherFotoHeadstock(),
+            escolherFotoEscudo(),
+            escolherFotoMarcacoes(),
+            escolherFotoPecas())
 }
