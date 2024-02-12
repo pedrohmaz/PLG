@@ -23,42 +23,25 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import com.plg.GuitarraBracos
-import com.plg.GuitarraModelos
-import com.plg.bracoGuit
-import com.plg.escolherFotoBraco
-import com.plg.escolherFotoCorpo
-import com.plg.escolherFotoEscudo
-import com.plg.escolherFotoHeadstock
-import com.plg.escolherFotoMarcacoes
-import com.plg.escolherFotoPecas
-import com.plg.modeloGuit
 import com.plg.ui.theme.CorCorpoCreme
 import com.plg.ui.theme.CorCorpoSunburst
 import com.plg.ui.theme.CorCorpoVerde
 import com.plg.ui.theme.CorCorpoVermelho
-import com.plg.ui.theme.CorEscalaClara
-import com.plg.ui.theme.CorEscalaEscura
-import com.plg.ui.theme.CorMarcacaoClara
-import com.plg.ui.theme.CorMarcacaoEscura
 import com.plg.ui.theme.Orange
 
 @Composable
 fun OpcoesDoInstrumentoMenu(
-    corpo: MutableState<Int>,
-    braco: MutableState<Int>,
-    headstock: MutableState<Int>,
-    escudo: MutableState<Int>,
-    marcacoes: MutableState<Int>,
-    pecas: MutableState<Int>,
-    corCorpo: MutableState<ColorFilter>,
-    corBraco: MutableState<ColorFilter>,
-    corMarcacoes: MutableState<ColorFilter>
-
+    aoClicarBotaoVerde: (Color) -> Unit,
+    aoClicarBotaoVermelho: (Color) -> Unit,
+    aoClicarBotaoCreme: (Color) -> Unit,
+    aoClicarBotaoSunburst: (Color) -> Unit,
+    aoClicarBotaoModelo: () -> Unit,
+    aoClicarBotaoBraco: () -> Unit
 ) {
     val sunburst = listOf(Orange, Black)
     Box(
@@ -77,15 +60,7 @@ fun OpcoesDoInstrumentoMenu(
             {
                 Button(
                     onClick = {
-                        if (bracoGuit == GuitarraBracos.Escuro) {
-                            corBraco.value = ColorFilter.tint(CorEscalaClara)
-                            corMarcacoes.value = ColorFilter.tint(CorMarcacaoEscura)
-                            bracoGuit = GuitarraBracos.Claro
-                        } else {
-                            corBraco.value = ColorFilter.tint(CorEscalaEscura)
-                            corMarcacoes.value = ColorFilter.tint(CorMarcacaoClara)
-                            bracoGuit = GuitarraBracos.Escuro
-                        }
+                        aoClicarBotaoBraco()
                     },
                     modifier = Modifier.align(CenterHorizontally)
                 ) {
@@ -93,14 +68,8 @@ fun OpcoesDoInstrumentoMenu(
                 }
                 Button(
                     onClick = {
-                        modeloGuit = if (modeloGuit == GuitarraModelos.Strato) GuitarraModelos.Tele
-                        else GuitarraModelos.Strato
-                        aoClicarNoBotao(corpo, escolherFotoCorpo())
-                        aoClicarNoBotao(braco, escolherFotoBraco())
-                        aoClicarNoBotao(headstock, escolherFotoHeadstock())
-                        aoClicarNoBotao(escudo, escolherFotoEscudo())
-                        aoClicarNoBotao(marcacoes, escolherFotoMarcacoes())
-                        aoClicarNoBotao(pecas, escolherFotoPecas())
+                        aoClicarBotaoModelo()
+
                     },
                     modifier = Modifier.align(CenterHorizontally)
                 ) {
@@ -114,7 +83,7 @@ fun OpcoesDoInstrumentoMenu(
                 Row {
                     Button(
                         onClick = {
-                            corCorpo.value = ColorFilter.tint(CorCorpoVerde)
+                            aoClicarBotaoVerde(CorCorpoVerde)
                         },
                         modifier = Modifier
                             .border(2.dp, Black, CircleShape)
@@ -128,7 +97,7 @@ fun OpcoesDoInstrumentoMenu(
 
                     Button(
                         onClick = {
-                            corCorpo.value = ColorFilter.tint(CorCorpoVermelho)
+                            aoClicarBotaoVermelho(CorCorpoVermelho)
                         },
                         modifier = Modifier
                             .border(2.dp, Black, CircleShape)
@@ -143,7 +112,7 @@ fun OpcoesDoInstrumentoMenu(
                 Row {
                     Button(
                         onClick = {
-                            corCorpo.value = ColorFilter.tint(CorCorpoCreme)
+                            aoClicarBotaoCreme(CorCorpoCreme)
                         },
                         modifier = Modifier
                             .border(2.dp, Black, CircleShape)
@@ -156,7 +125,7 @@ fun OpcoesDoInstrumentoMenu(
 
                     Button(
                         onClick = {
-                            corCorpo.value = ColorFilter.tint(CorCorpoSunburst)
+                            aoClicarBotaoSunburst(CorCorpoSunburst)
                         },
                         modifier = Modifier
                             .border(2.dp, Black, CircleShape)
@@ -169,11 +138,6 @@ fun OpcoesDoInstrumentoMenu(
             }
         }
     }
-}
-
-
-fun aoClicarNoBotao(parte: MutableState<Int>, res: Int) {
-    parte.value = res
 }
 
 

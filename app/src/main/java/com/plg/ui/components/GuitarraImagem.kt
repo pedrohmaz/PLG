@@ -26,7 +26,7 @@ fun GuitarraImagem(
     escudo: Int?,
     marcacoes: Int?,
     pecas: Int,
-    cor: ColorFilter? = null,
+    corCorpo: ColorFilter? = null,
     corBraco: ColorFilter? = null,
     corMarcacoes: ColorFilter? = null
 ) {
@@ -40,7 +40,7 @@ fun GuitarraImagem(
         Image(
             painterResource(id = corpo),
             contentDescription = null,
-            colorFilter = cor
+            colorFilter = corCorpo
         )
         Image(
             escudo?.let { painterResource(id = it) }
