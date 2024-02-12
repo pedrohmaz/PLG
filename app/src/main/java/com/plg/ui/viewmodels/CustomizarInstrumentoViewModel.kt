@@ -5,10 +5,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.lifecycle.ViewModel
 import com.plg.R
 import com.plg.ui.theme.CorCorpoVermelho
-import com.plg.ui.theme.CorEscalaClara
 import com.plg.ui.theme.CorEscalaEscura
+import com.plg.ui.theme.CorEscudoOriginal
 import com.plg.ui.theme.CorMarcacaoClara
-import com.plg.ui.theme.CorMarcacaoEscura
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -30,59 +29,56 @@ class CustomizarInstrumentoViewModel : ViewModel() {
     val corCorpo: StateFlow<ColorFilter> get() = _corCorpo
     private val _corBraco = MutableStateFlow(ColorFilter.tint(CorEscalaEscura))
     val corBraco: StateFlow<ColorFilter> get() = _corBraco
+    private val _corHeadstock = MutableStateFlow(ColorFilter.tint(CorMarcacaoClara))
+    val corHeadstock: StateFlow<ColorFilter> get() = _corHeadstock
+    private val _corEscudo = MutableStateFlow(ColorFilter.tint(CorEscudoOriginal))
+    val corEscudo: StateFlow<ColorFilter> get() = _corEscudo
     private val _corMarcacoes = MutableStateFlow(ColorFilter.tint(CorMarcacaoClara))
     val corMarcacoes: StateFlow<ColorFilter> get() = _corMarcacoes
 
-
     private var modeloGuit = GuitarraModelos.Strato
-    private var bracoGuit = GuitarraBracos.Escuro
-
-   private enum class GuitarraBracos {
-        Claro,
-        Escuro
-    }
 
    private enum class GuitarraModelos {
         Strato,
         Tele
     }
 
-    fun escolherFotoBraco(): Int {
+    private fun escolherFotoBraco(): Int {
         return when (modeloGuit) {
             GuitarraModelos.Strato -> R.drawable.strato_braco
             GuitarraModelos.Tele -> R.drawable.tele_braco
         }
     }
 
-    fun escolherFotoCorpo(): Int {
+    private fun escolherFotoCorpo(): Int {
         return when (modeloGuit) {
             GuitarraModelos.Strato -> R.drawable.strato_corpo
             GuitarraModelos.Tele -> R.drawable.tele_corpo
         }
     }
 
-    fun escolherFotoHeadstock(): Int {
+    private fun escolherFotoHeadstock(): Int {
         return when (modeloGuit) {
             GuitarraModelos.Strato -> R.drawable.strato_headstock
             GuitarraModelos.Tele -> R.drawable.tele_headstock
         }
     }
 
-    fun escolherFotoMarcacoes(): Int {
+    private fun escolherFotoMarcacoes(): Int {
         return when (modeloGuit) {
             GuitarraModelos.Strato -> R.drawable.strato_marcacoes
             GuitarraModelos.Tele -> R.drawable.tele_marcacoes
         }
     }
 
-    fun escolherFotoEscudo(): Int {
+    private fun escolherFotoEscudo(): Int {
         return when (modeloGuit) {
             GuitarraModelos.Strato -> R.drawable.strato_escudo
             GuitarraModelos.Tele -> R.drawable.tele_escudo
         }
     }
 
-    fun escolherFotoPecas(): Int {
+    private fun escolherFotoPecas(): Int {
         return when (modeloGuit) {
             GuitarraModelos.Strato -> R.drawable.strato_pecas
             GuitarraModelos.Tele -> R.drawable.tele_pecas
@@ -90,8 +86,24 @@ class CustomizarInstrumentoViewModel : ViewModel() {
     }
 
 
-    fun trocarCor(cor: Color) {
+    fun trocarCorCorpo(cor: Color) {
         _corCorpo.value = ColorFilter.tint(cor)
+    }
+
+    fun trocarCorEscudo(cor: Color) {
+        _corEscudo.value = ColorFilter.tint(cor)
+    }
+
+    fun trocarCorHeadstock(cor: Color){
+        _corHeadstock.value = ColorFilter.tint(cor)
+    }
+
+    fun trocarCorBraco(cor: Color){
+        _corBraco.value = ColorFilter.tint(cor)
+    }
+
+    fun trocarCorMarcacoes(cor: Color){
+        _corMarcacoes.value = ColorFilter.tint(cor)
     }
 
     fun trocarModelo() {
@@ -105,16 +117,5 @@ class CustomizarInstrumentoViewModel : ViewModel() {
         _pecas.value = escolherFotoPecas()
     }
 
-    fun trocarBraco() {
-        if (bracoGuit == GuitarraBracos.Escuro) {
-            _corBraco.value = ColorFilter.tint(CorEscalaClara)
-            _corMarcacoes.value = ColorFilter.tint(CorMarcacaoEscura)
-            bracoGuit = GuitarraBracos.Claro
-        } else {
-            _corBraco.value = ColorFilter.tint(CorEscalaEscura)
-            _corMarcacoes.value = ColorFilter.tint(CorMarcacaoClara)
-            bracoGuit = GuitarraBracos.Escuro
-        }
-    }
 
 }
