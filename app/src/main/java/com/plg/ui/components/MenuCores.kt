@@ -3,9 +3,7 @@ package com.plg.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -13,8 +11,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -24,6 +20,7 @@ import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.unit.dp
 import com.plg.function
+import com.plg.ui.theme.CorCorpoAzul
 import com.plg.ui.theme.CorCorpoCreme
 import com.plg.ui.theme.CorCorpoSunburst
 import com.plg.ui.theme.CorCorpoVerde
@@ -52,198 +49,191 @@ fun MenuCoresMutable(
     corBotao6: Color = Transparent
 ) {
     //val sunburst = listOf(Orange, Black)
-    Box(
+
+
+    Row(
+        verticalAlignment = CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
-            .height(85.dp)
             .fillMaxWidth()
+            .height(65.dp)
             .background(Black)
-
     ) {
-        Row(
-            verticalAlignment = CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly,
+        Button(
+            onClick = {
+                aoClicarBotao1()
+            },
             modifier = Modifier
-                .fillMaxSize()
-                .align(Center)
+                .border(1.dp, White, CircleShape)
+                .background(corBotao1, CircleShape)
+                .size(40.dp),
+            colors = ButtonDefaults.buttonColors(Transparent)
+
         ) {
-            Button(
-                onClick = {
-                    aoClicarBotao1()
-                },
-                modifier = Modifier
-                    .border(1.dp, White, CircleShape)
-                    .background(corBotao1, CircleShape)
-                    .size(40.dp),
-                colors = ButtonDefaults.buttonColors(Transparent)
+        }
 
-            ) {
-            }
+        Button(
+            onClick = {
+                aoClicarBotao2()
+            },
+            modifier = Modifier
+                .border(1.dp, White, CircleShape)
+                .background(corBotao2, CircleShape)
+                .size(40.dp),
+            colors = ButtonDefaults.buttonColors(Transparent)
 
-            Button(
-                onClick = {
-                    aoClicarBotao2()
-                },
-                modifier = Modifier
-                    .border(1.dp, White, CircleShape)
-                    .background(corBotao2, CircleShape)
-                    .size(40.dp),
-                colors = ButtonDefaults.buttonColors(Transparent)
+        ) {
+        }
 
-            ) {
-            }
+        Button(
+            onClick = {
+                aoClicarBotao3()
+            },
+            modifier = Modifier
+                .alpha(if (botao3Ativado) 1f else 0f)
+                .border(1.dp, White, CircleShape)
+                .background(corBotao3, CircleShape)
+                .size(40.dp),
+            colors = ButtonDefaults.buttonColors(Transparent)
+        ) {
+        }
 
-            Button(
-                onClick = {
-                    aoClicarBotao3()
-                },
-                modifier = Modifier
-                    .alpha(if (botao3Ativado) 1f else 0f)
-                    .border(1.dp, White, CircleShape)
-                    .background(corBotao3, CircleShape)
-                    .size(40.dp),
-                colors = ButtonDefaults.buttonColors(Transparent)
-            ) {
-            }
+        Button(
+            onClick = {
+                aoClicarBotao4()
+            },
+            modifier = Modifier
+                .alpha(if (botao4Ativado) 1f else 0f)
+                .border(1.dp, White, CircleShape)
+                .background(corBotao4, CircleShape)
+                .size(40.dp),
+            colors = ButtonDefaults.buttonColors(Transparent),
+        ) {
+        }
 
-            Button(
-                onClick = {
-                    aoClicarBotao4()
-                },
-                modifier = Modifier
-                    .alpha(if (botao4Ativado) 1f else 0f)
-                    .border(1.dp, White, CircleShape)
-                    .background(corBotao4, CircleShape)
-                    .size(40.dp),
-                colors = ButtonDefaults.buttonColors(Transparent),
-            ) {
-            }
+        Button(
+            onClick = {
+                aoClicarBotao5()
+            },
+            modifier = Modifier
+                .alpha(if (botao5Ativado) 1f else 0f)
+                .border(1.dp, White, CircleShape)
+                .background(corBotao5, CircleShape)
+                .size(40.dp),
+            colors = ButtonDefaults.buttonColors(Transparent)
+        ) {
+        }
 
-            Button(
-                onClick = {
-                    aoClicarBotao5()
-                },
-                modifier = Modifier
-                    .alpha(if (botao5Ativado) 1f else 0f)
-                    .border(1.dp, White, CircleShape)
-                    .background(corBotao5, CircleShape)
-                    .size(40.dp),
-                colors = ButtonDefaults.buttonColors(Transparent)
-            ) {
-            }
-
-            Button(
-                onClick = {
-                    aoClicarBotao6()
-                },
-                modifier = Modifier
-                    .alpha(if (botao6Ativado) 1f else 0f)
-                    .border(1.dp, White, CircleShape)
-                    .background(corBotao6, CircleShape)
-                    .size(40.dp),
-                colors = ButtonDefaults.buttonColors(Transparent)
-            ) {
-            }
+        Button(
+            onClick = {
+                aoClicarBotao6()
+            },
+            modifier = Modifier
+                .alpha(if (botao6Ativado) 1f else 0f)
+                .border(1.dp, White, CircleShape)
+                .background(corBotao6, CircleShape)
+                .size(40.dp),
+            colors = ButtonDefaults.buttonColors(Transparent)
+        ) {
         }
     }
 }
 
 
 @Composable
-fun MenuCoresCorpo(parteSelecionada: MutableState<(Color) -> Unit>) {
+fun MenuCoresCorpo(parteSelecionada:(Color) -> Unit) {
     MenuCoresMutable(
-        aoClicarBotao1 = { parteSelecionada.value(CorCorpoVerde) },
+        aoClicarBotao1 = { parteSelecionada(CorCorpoVerde) },
         corBotao1 = CorCorpoVerde,
-        aoClicarBotao2 = { parteSelecionada.value(CorCorpoVermelho) },
+        aoClicarBotao2 = { parteSelecionada(CorCorpoVermelho) },
         corBotao2 = CorCorpoVermelho,
         botao3Ativado = true,
-        aoClicarBotao3 = { parteSelecionada.value(CorCorpoCreme) },
+        aoClicarBotao3 = { parteSelecionada(CorCorpoCreme) },
         corBotao3 = CorCorpoCreme,
         botao4Ativado = true,
-        aoClicarBotao4 = { parteSelecionada.value(CorCorpoSunburst) },
+        aoClicarBotao4 = { parteSelecionada(CorCorpoSunburst) },
         corBotao4 = CorCorpoSunburst,
         botao5Ativado = true,
-        aoClicarBotao5 = { parteSelecionada.value(Color.Blue) },
-        corBotao5 = Color.Blue,
+        aoClicarBotao5 = { parteSelecionada(CorCorpoAzul) },
+        corBotao5 = CorCorpoAzul,
         botao6Ativado = true,
-        aoClicarBotao6 = { parteSelecionada.value(Black) },
+        aoClicarBotao6 = { parteSelecionada(Black) },
         corBotao6 = Black
     )
 }
 
 @Composable
-fun MenuCoresBraco(parteSelecionada: MutableState<(Color) -> Unit>) {
+fun MenuCoresBraco(parteSelecionada: (Color) -> Unit) {
     MenuCoresMutable(
-        aoClicarBotao1 = { parteSelecionada.value(CorEscalaClara) },
+        aoClicarBotao1 = { parteSelecionada(CorEscalaClara) },
         corBotao1 = CorEscalaClara,
-        aoClicarBotao2 = { parteSelecionada.value(CorEscalaEscura) },
-        corBotao2 = CorEscalaEscura
+        aoClicarBotao2 = { parteSelecionada(CorEscalaEscura) },
+        corBotao2 = CorEscalaEscura,
     )
 }
 
 @Composable
-fun MenuCoresHeadstock(parteSelecionada: MutableState<(Color) -> Unit>) {
+fun MenuCoresHeadstock(parteSelecionada: (Color) -> Unit) {
     MenuCoresMutable(
-        aoClicarBotao1 = { parteSelecionada.value(CorCorpoVerde) },
+        aoClicarBotao1 = { parteSelecionada(CorCorpoVerde) },
         corBotao1 = CorCorpoVerde,
-        aoClicarBotao2 = { parteSelecionada.value(CorCorpoVermelho) },
+        aoClicarBotao2 = { parteSelecionada(CorCorpoVermelho) },
         corBotao2 = CorCorpoVermelho,
         botao3Ativado = true,
-        aoClicarBotao3 = { parteSelecionada.value(CorCorpoCreme) },
+        aoClicarBotao3 = { parteSelecionada(CorCorpoCreme) },
         corBotao3 = CorCorpoCreme,
         botao4Ativado = true,
-        aoClicarBotao4 = { parteSelecionada.value(CorEscalaClara) },
+        aoClicarBotao4 = { parteSelecionada(CorEscalaClara) },
         corBotao4 = CorEscalaClara,
         botao5Ativado = true,
-        aoClicarBotao5 = { parteSelecionada.value(Color.Blue) },
-        corBotao5 = Color.Blue,
+        aoClicarBotao5 = { parteSelecionada(CorCorpoAzul) },
+        corBotao5 = CorCorpoAzul,
         botao6Ativado = true,
-        aoClicarBotao6 = { parteSelecionada.value(Black) },
+        aoClicarBotao6 = { parteSelecionada(Black) },
         corBotao6 = Black
     )
 }
 
 @Composable
-fun MenuCoresEscudo(parteSelecionada: MutableState<(Color) -> Unit>) {
+fun MenuCoresEscudo(parteSelecionada: (Color) -> Unit) {
     MenuCoresMutable(
-        aoClicarBotao1 = { parteSelecionada.value(CorCorpoVerde) },
+        aoClicarBotao1 = { parteSelecionada(CorCorpoVerde) },
         corBotao1 = CorCorpoVerde,
-        aoClicarBotao2 = { parteSelecionada.value(CorCorpoVermelho) },
+        aoClicarBotao2 = { parteSelecionada(CorCorpoVermelho) },
         corBotao2 = CorCorpoVermelho,
         botao3Ativado = true,
-        aoClicarBotao3 = { parteSelecionada.value(CorCorpoCreme) },
+        aoClicarBotao3 = { parteSelecionada(CorCorpoCreme) },
         corBotao3 = CorCorpoCreme,
         botao4Ativado = true,
-        aoClicarBotao4 = { parteSelecionada.value(CorCorpoSunburst) },
+        aoClicarBotao4 = { parteSelecionada(CorCorpoSunburst) },
         corBotao4 = CorCorpoSunburst,
         botao5Ativado = true,
-        aoClicarBotao5 = { parteSelecionada.value(Color.Blue) },
-        corBotao5 = Color.Blue,
+        aoClicarBotao5 = { parteSelecionada(CorCorpoAzul) },
+        corBotao5 = CorCorpoAzul,
         botao6Ativado = true,
-        aoClicarBotao6 = { parteSelecionada.value(Black) },
+        aoClicarBotao6 = { parteSelecionada(Black) },
         corBotao6 = Black
     )
 }
 
 @Composable
-fun MenuCoresMarcacoes(parteSelecionada: MutableState<(Color) -> Unit>) {
+fun MenuCoresMarcacoes(parteSelecionada: (Color) -> Unit) {
     MenuCoresMutable(
-        aoClicarBotao1 = { parteSelecionada.value(CorCorpoVerde) },
+        aoClicarBotao1 = { parteSelecionada(CorCorpoVerde) },
         corBotao1 = CorCorpoVerde,
-        aoClicarBotao2 = { parteSelecionada.value(CorCorpoVermelho) },
+        aoClicarBotao2 = { parteSelecionada(CorCorpoVermelho) },
         corBotao2 = CorCorpoVermelho,
         botao3Ativado = true,
-        aoClicarBotao3 = { parteSelecionada.value(CorEscalaClara) },
+        aoClicarBotao3 = { parteSelecionada(CorEscalaClara) },
         corBotao3 = CorEscalaClara,
         botao4Ativado = true,
-        aoClicarBotao4 = { parteSelecionada.value(CorEscalaEscura) },
+        aoClicarBotao4 = { parteSelecionada(CorEscalaEscura) },
         corBotao4 = CorEscalaEscura,
         botao5Ativado = true,
-        aoClicarBotao5 = { parteSelecionada.value(Black) },
+        aoClicarBotao5 = { parteSelecionada(Black) },
         corBotao5 = Black
     )
 }
-
-
 
 
 //@Preview(showBackground = true)

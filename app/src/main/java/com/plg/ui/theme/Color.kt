@@ -11,6 +11,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val Orange = Color(0xFFCC6600)
+val Ice = Color(0xffb4d4d0)
 
 val CorEscalaClara = Color(0xfff9c553)
 val CorEscalaEscura = Color(0xff3f220a)
@@ -22,5 +23,7 @@ val CorCorpoCreme = Color(0xffF3db92)
 val CorCorpoVermelho = Color(0xff931e2b)
 val CorCorpoVerde = Color(0xff48da68)
 val CorCorpoSunburst = Color(0xff3f220a)
+val CorCorpoAzul = Color(0xff2f50bd)
 
 val CorEscudoOriginal = Color(0xffede0d3)
+

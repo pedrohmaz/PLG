@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.lifecycle.ViewModel
 import com.plg.R
+import com.plg.ui.components.BotaoSelecionado
 import com.plg.ui.theme.CorCorpoVermelho
 import com.plg.ui.theme.CorEscalaEscura
 import com.plg.ui.theme.CorEscudoOriginal
@@ -35,6 +36,8 @@ class CustomizarInstrumentoViewModel : ViewModel() {
     val corEscudo: StateFlow<ColorFilter> get() = _corEscudo
     private val _corMarcacoes = MutableStateFlow(ColorFilter.tint(CorMarcacaoClara))
     val corMarcacoes: StateFlow<ColorFilter> get() = _corMarcacoes
+    private val _botaoSelecionado = MutableStateFlow(BotaoSelecionado.Corpo)
+    val botaoSelecionado: StateFlow<BotaoSelecionado> get() = _botaoSelecionado
 
     private var modeloGuit = GuitarraModelos.Strato
 
@@ -86,23 +89,23 @@ class CustomizarInstrumentoViewModel : ViewModel() {
     }
 
 
-    fun trocarCorCorpo(cor: Color) {
+    private fun trocarCorCorpo(cor: Color) {
         _corCorpo.value = ColorFilter.tint(cor)
     }
 
-    fun trocarCorEscudo(cor: Color) {
+    private fun trocarCorEscudo(cor: Color) {
         _corEscudo.value = ColorFilter.tint(cor)
     }
 
-    fun trocarCorHeadstock(cor: Color){
+    private fun trocarCorHeadstock(cor: Color){
         _corHeadstock.value = ColorFilter.tint(cor)
     }
 
-    fun trocarCorBraco(cor: Color){
+    private fun trocarCorBraco(cor: Color){
         _corBraco.value = ColorFilter.tint(cor)
     }
 
-    fun trocarCorMarcacoes(cor: Color){
+    private fun trocarCorMarcacoes(cor: Color){
         _corMarcacoes.value = ColorFilter.tint(cor)
     }
 
@@ -115,6 +118,20 @@ class CustomizarInstrumentoViewModel : ViewModel() {
         _escudo.value = escolherFotoEscudo()
         _marcacoes.value = escolherFotoMarcacoes()
         _pecas.value = escolherFotoPecas()
+    }
+
+    fun trocarBotaoSelecionado(botao: BotaoSelecionado) {
+        _botaoSelecionado.value = botao
+    }
+
+    fun trocarParteSelecionada() : (Color) -> Unit{
+        return when(_botaoSelecionado.value){
+            BotaoSelecionado.Corpo -> ::trocarCorCorpo
+            BotaoSelecionado.Braco -> ::trocarCorBraco
+            BotaoSelecionado.Headstock -> ::trocarCorHeadstock
+            BotaoSelecionado.Escudo -> ::trocarCorEscudo
+            BotaoSelecionado.Marcacoes -> ::trocarCorMarcacoes
+        }
     }
 
 
