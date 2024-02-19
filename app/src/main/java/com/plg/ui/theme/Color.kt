@@ -24,6 +24,7 @@ val CorCorpoVermelho = Color(0xff931e2b)
 val CorCorpoVerde = Color(0xff48da68)
 val CorCorpoSunburst = Color(0xff3f220a)
 val CorCorpoAzul = Color(0xff2f50bd)
+val CorCorpoMadeira = Color(0xff69562d)
 
 val CorEscudoOriginal = Color(0xffede0d3)
 

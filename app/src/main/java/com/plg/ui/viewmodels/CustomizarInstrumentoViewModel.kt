@@ -39,9 +39,16 @@ class CustomizarInstrumentoViewModel : ViewModel() {
     private val _botaoSelecionado = MutableStateFlow(BotaoSelecionado.Corpo)
     val botaoSelecionado: StateFlow<BotaoSelecionado> get() = _botaoSelecionado
 
+    private val _valorModelo = MutableStateFlow(2000f)
+    private val _valorHeadstock = MutableStateFlow(0f)
+    private val _valorEscala = MutableStateFlow(100f)
+    private val _valorEscudo = MutableStateFlow(200f)
+    private val _valorTotal = MutableStateFlow(atualizarValorTotal())
+    val valorTotal: StateFlow<Float> get() = _valorTotal
+
     private var modeloGuit = GuitarraModelos.Strato
 
-   private enum class GuitarraModelos {
+    private enum class GuitarraModelos {
         Strato,
         Tele
     }
@@ -89,29 +96,42 @@ class CustomizarInstrumentoViewModel : ViewModel() {
     }
 
 
-    private fun trocarCorCorpo(cor: Color) {
+    private fun trocarCorCorpo(cor: Color, valor: Float) {
         _corCorpo.value = ColorFilter.tint(cor)
     }
 
-    private fun trocarCorEscudo(cor: Color) {
+    private fun trocarCorEscudo(cor: Color, valor: Float) {
         _corEscudo.value = ColorFilter.tint(cor)
+        _valorEscudo.value = valor
+        _valorTotal.value = atualizarValorTotal()
     }
 
-    private fun trocarCorHeadstock(cor: Color){
+    private fun trocarCorHeadstock(cor: Color, valor: Float) {
         _corHeadstock.value = ColorFilter.tint(cor)
+        _valorHeadstock.value = valor
+        _valorTotal.value = atualizarValorTotal()
     }
 
-    private fun trocarCorBraco(cor: Color){
+    private fun trocarCorBraco(cor: Color, valor: Float) {
         _corBraco.value = ColorFilter.tint(cor)
+        _valorEscala.value = valor
+        _valorTotal.value = atualizarValorTotal()
     }
 
-    private fun trocarCorMarcacoes(cor: Color){
+    private fun trocarCorMarcacoes(cor: Color, valor: Float) {
         _corMarcacoes.value = ColorFilter.tint(cor)
     }
 
     fun trocarModelo() {
-        modeloGuit = if (modeloGuit == GuitarraModelos.Strato) GuitarraModelos.Tele
-        else GuitarraModelos.Strato
+        if (modeloGuit == GuitarraModelos.Strato) {
+            modeloGuit = GuitarraModelos.Tele
+            _valorModelo.value = 1500f
+            _valorTotal.value = atualizarValorTotal()
+        } else {
+            modeloGuit = GuitarraModelos.Strato
+            _valorModelo.value = 2000f
+            _valorTotal.value = atualizarValorTotal()
+        }
         _corpo.value = escolherFotoCorpo()
         _braco.value = escolherFotoBraco()
         _headstock.value = escolherFotoHeadstock()
@@ -120,12 +140,16 @@ class CustomizarInstrumentoViewModel : ViewModel() {
         _pecas.value = escolherFotoPecas()
     }
 
+    private fun atualizarValorTotal(): Float {
+        return _valorModelo.value + _valorHeadstock.value + _valorEscala.value + _valorEscudo.value
+    }
+
     fun trocarBotaoSelecionado(botao: BotaoSelecionado) {
         _botaoSelecionado.value = botao
     }
 
-    fun trocarParteSelecionada() : (Color) -> Unit{
-        return when(_botaoSelecionado.value){
+    fun trocarParteSelecionada(): (Color, Float) -> Unit {
+        return when (_botaoSelecionado.value) {
             BotaoSelecionado.Corpo -> ::trocarCorCorpo
             BotaoSelecionado.Braco -> ::trocarCorBraco
             BotaoSelecionado.Headstock -> ::trocarCorHeadstock

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Transparent
@@ -22,11 +23,14 @@ import androidx.compose.ui.unit.dp
 import com.plg.function
 import com.plg.ui.theme.CorCorpoAzul
 import com.plg.ui.theme.CorCorpoCreme
+import com.plg.ui.theme.CorCorpoMadeira
 import com.plg.ui.theme.CorCorpoSunburst
 import com.plg.ui.theme.CorCorpoVerde
 import com.plg.ui.theme.CorCorpoVermelho
 import com.plg.ui.theme.CorEscalaClara
 import com.plg.ui.theme.CorEscalaEscura
+import com.plg.ui.theme.CorMarcacaoClara
+import com.plg.ui.theme.CorMarcacaoEscura
 
 
 @Composable
@@ -46,7 +50,7 @@ fun MenuCoresMutable(
     corBotao5: Color = Transparent,
     botao6Ativado: Boolean = false,
     aoClicarBotao6: function = {},
-    corBotao6: Color = Transparent
+    corBotao6: Brush = Brush.horizontalGradient(listOf(Transparent, Transparent))
 ) {
     //val sunburst = listOf(Orange, Black)
 
@@ -141,97 +145,93 @@ fun MenuCoresMutable(
 
 
 @Composable
-fun MenuCoresCorpo(parteSelecionada:(Color) -> Unit) {
+fun MenuCoresCorpo(parteSelecionada: (Color, valor: Float) -> Unit) {
     MenuCoresMutable(
-        aoClicarBotao1 = { parteSelecionada(CorCorpoVerde) },
-        corBotao1 = CorCorpoVerde,
-        aoClicarBotao2 = { parteSelecionada(CorCorpoVermelho) },
-        corBotao2 = CorCorpoVermelho,
+        aoClicarBotao1 = { parteSelecionada(CorCorpoVermelho, 0f) },
+        corBotao1 = CorCorpoVermelho,
+        aoClicarBotao2 = { parteSelecionada(CorCorpoVerde, 0f) },
+        corBotao2 = CorCorpoVerde,
         botao3Ativado = true,
-        aoClicarBotao3 = { parteSelecionada(CorCorpoCreme) },
+        aoClicarBotao3 = { parteSelecionada(CorCorpoCreme, 0f) },
         corBotao3 = CorCorpoCreme,
         botao4Ativado = true,
-        aoClicarBotao4 = { parteSelecionada(CorCorpoSunburst) },
-        corBotao4 = CorCorpoSunburst,
+        aoClicarBotao4 = { parteSelecionada(Black, 0f) },
+        corBotao4 = Black,
         botao5Ativado = true,
-        aoClicarBotao5 = { parteSelecionada(CorCorpoAzul) },
+        aoClicarBotao5 = { parteSelecionada(CorCorpoAzul, 0f) },
         corBotao5 = CorCorpoAzul,
         botao6Ativado = true,
-        aoClicarBotao6 = { parteSelecionada(Black) },
-        corBotao6 = Black
+        aoClicarBotao6 = { parteSelecionada(CorCorpoMadeira, 0f) },
+        corBotao6 = Brush.horizontalGradient(listOf(CorCorpoMadeira, CorCorpoMadeira))
     )
 }
 
 @Composable
-fun MenuCoresBraco(parteSelecionada: (Color) -> Unit) {
+fun MenuCoresBraco(parteSelecionada: (Color, valor: Float) -> Unit) {
     MenuCoresMutable(
-        aoClicarBotao1 = { parteSelecionada(CorEscalaClara) },
-        corBotao1 = CorEscalaClara,
-        aoClicarBotao2 = { parteSelecionada(CorEscalaEscura) },
-        corBotao2 = CorEscalaEscura,
+        aoClicarBotao1 = { parteSelecionada(CorEscalaEscura, 100f) },
+        corBotao1 = CorEscalaEscura,
+        aoClicarBotao2 = { parteSelecionada(CorEscalaClara, 0f) },
+        corBotao2 = CorEscalaClara,
     )
 }
 
 @Composable
-fun MenuCoresHeadstock(parteSelecionada: (Color) -> Unit) {
+fun MenuCoresHeadstock(parteSelecionada: (Color, valor: Float) -> Unit ) {
     MenuCoresMutable(
-        aoClicarBotao1 = { parteSelecionada(CorCorpoVerde) },
-        corBotao1 = CorCorpoVerde,
-        aoClicarBotao2 = { parteSelecionada(CorCorpoVermelho) },
-        corBotao2 = CorCorpoVermelho,
+        aoClicarBotao1 = {
+            parteSelecionada(CorCorpoVermelho, 150f)
+        },
+        corBotao1 = CorCorpoVermelho,
+        aoClicarBotao2 = { parteSelecionada(CorCorpoVerde, 150f) },
+        corBotao2 = CorCorpoVerde,
         botao3Ativado = true,
-        aoClicarBotao3 = { parteSelecionada(CorCorpoCreme) },
+        aoClicarBotao3 = { parteSelecionada(CorCorpoCreme, 150f) },
         corBotao3 = CorCorpoCreme,
         botao4Ativado = true,
-        aoClicarBotao4 = { parteSelecionada(CorEscalaClara) },
-        corBotao4 = CorEscalaClara,
+        aoClicarBotao4 = { parteSelecionada(Black, 150f) },
+        corBotao4 = Black,
         botao5Ativado = true,
-        aoClicarBotao5 = { parteSelecionada(CorCorpoAzul) },
+        aoClicarBotao5 = { parteSelecionada(CorCorpoAzul, 150f) },
         corBotao5 = CorCorpoAzul,
         botao6Ativado = true,
-        aoClicarBotao6 = { parteSelecionada(Black) },
-        corBotao6 = Black
+        aoClicarBotao6 = { parteSelecionada(CorEscalaClara, 0f) },
+        corBotao6 = Brush.horizontalGradient(listOf(CorEscalaClara, CorEscalaClara))
     )
 }
 
 @Composable
-fun MenuCoresEscudo(parteSelecionada: (Color) -> Unit) {
+fun MenuCoresEscudo(parteSelecionada: (Color, valor: Float) -> Unit) {
     MenuCoresMutable(
-        aoClicarBotao1 = { parteSelecionada(CorCorpoVerde) },
-        corBotao1 = CorCorpoVerde,
-        aoClicarBotao2 = { parteSelecionada(CorCorpoVermelho) },
-        corBotao2 = CorCorpoVermelho,
+        aoClicarBotao1 = { parteSelecionada(CorCorpoVermelho, 200f) },
+        corBotao1 = CorCorpoVermelho,
+        aoClicarBotao2 = { parteSelecionada(CorCorpoVerde, 200f) },
+        corBotao2 = CorCorpoVerde,
         botao3Ativado = true,
-        aoClicarBotao3 = { parteSelecionada(CorCorpoCreme) },
+        aoClicarBotao3 = { parteSelecionada(CorCorpoCreme, 200f) },
         corBotao3 = CorCorpoCreme,
         botao4Ativado = true,
-        aoClicarBotao4 = { parteSelecionada(CorCorpoSunburst) },
-        corBotao4 = CorCorpoSunburst,
+        aoClicarBotao4 = { parteSelecionada(Black, 200f) },
+        corBotao4 = Black,
         botao5Ativado = true,
-        aoClicarBotao5 = { parteSelecionada(CorCorpoAzul) },
+        aoClicarBotao5 = { parteSelecionada(CorCorpoAzul, 200f) },
         corBotao5 = CorCorpoAzul,
         botao6Ativado = true,
-        aoClicarBotao6 = { parteSelecionada(Black) },
-        corBotao6 = Black
+        aoClicarBotao6 = { parteSelecionada(Transparent, 0f ) },
+        corBotao6 = Brush.horizontalGradient(listOf(Black, White, Black, White, Black, White, Black, White, Black, White, Black, White))
     )
 }
 
 @Composable
-fun MenuCoresMarcacoes(parteSelecionada: (Color) -> Unit) {
+fun MenuCoresMarcacoes(parteSelecionada: (Color, valor: Float) -> Unit) {
     MenuCoresMutable(
-        aoClicarBotao1 = { parteSelecionada(CorCorpoVerde) },
-        corBotao1 = CorCorpoVerde,
-        aoClicarBotao2 = { parteSelecionada(CorCorpoVermelho) },
-        corBotao2 = CorCorpoVermelho,
+        aoClicarBotao1 = { parteSelecionada(CorMarcacaoEscura, 0f) },
+        corBotao1 = CorMarcacaoEscura,
+        aoClicarBotao2 = { parteSelecionada(CorMarcacaoClara, 0f)},
+        corBotao2 = CorMarcacaoClara,
         botao3Ativado = true,
-        aoClicarBotao3 = { parteSelecionada(CorEscalaClara) },
-        corBotao3 = CorEscalaClara,
-        botao4Ativado = true,
-        aoClicarBotao4 = { parteSelecionada(CorEscalaEscura) },
-        corBotao4 = CorEscalaEscura,
-        botao5Ativado = true,
-        aoClicarBotao5 = { parteSelecionada(Black) },
-        corBotao5 = Black
+        aoClicarBotao3 = { parteSelecionada(CorCorpoSunburst, 0f) },
+        corBotao3 = CorCorpoSunburst,
     )
 }
 
