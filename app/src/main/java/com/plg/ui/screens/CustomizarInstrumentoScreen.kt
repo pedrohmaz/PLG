@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -57,11 +58,11 @@ import com.plg.ui.viewmodels.CustomizarInstrumentoViewModel
 fun CustomizarInstrumentoScreen(activity: ComponentActivity) {
 
     val viewModel: CustomizarInstrumentoViewModel by activity.viewModels()
-    val parteSelecionada = remember { viewModel.trocarParteSelecionada() }
 
+
+    val parteSelecionada = remember { viewModel.trocarParteSelecionada() }
     val menuCores: MutableState<@Composable function> =
         remember { mutableStateOf(@Composable { MenuCoresCorpo(parteSelecionada) }) }
-
     val botaoSelecionado = viewModel.botaoSelecionado.collectAsState()
 
     fun trocarMenuCores() {
@@ -108,7 +109,7 @@ fun CustomizarInstrumentoScreen(activity: ComponentActivity) {
         }
     }
 
-    var scale by remember { mutableStateOf(1f) }
+    var scale by remember { mutableFloatStateOf(1f) }
     // var rotation by remember { mutableStateOf(0f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     val state = rememberTransformableState { zoomChange, offsetChange, _ ->
