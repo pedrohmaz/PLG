@@ -1,10 +1,12 @@
 package com.plg.ui.components
 
+import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.plg.ui.screens.CriarUsuarioScreen
 import com.plg.ui.screens.CustomizarInstrumentoScreen
 import com.plg.ui.screens.LoginScreen
 
@@ -19,7 +21,17 @@ fun Navigator(activity: ComponentActivity) {
         composable("login") {
             LoginScreen(activity = activity,
                 aoNavegarParaCustomizarInstrumento =
-                { navController.navigate("customizarInstrumento") })
+                {
+                    navController.navigate("customizarInstrumento")
+                },
+                aoNavegarParaCriarUsuario =
+                {
+                    navController.navigate("criarUsuario")
+                }
+            )
+        }
+        composable("criarUsuario") {
+            CriarUsuarioScreen(activity)
         }
         composable("customizarInstrumento") { CustomizarInstrumentoScreen(activity) }
     }

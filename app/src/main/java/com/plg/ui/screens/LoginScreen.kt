@@ -1,7 +1,9 @@
 package com.plg.ui.screens
 
 
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,10 +32,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -46,16 +47,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.plg.R
 import com.plg.function
+import com.plg.model.Usuario
 import com.plg.ui.theme.PLGTheme
+import com.plg.ui.viewmodels.LoginViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(activity: ComponentActivity, aoNavegarParaCustomizarInstrumento: function) {
+fun LoginScreen(
+    activity: ComponentActivity,
+    aoNavegarParaCustomizarInstrumento: function,
+    aoNavegarParaCriarUsuario: function
+) {
 
-    var textoUsuario by remember { mutableStateOf("") }
-    var textoSenha by remember { mutableStateOf("") }
-    var mostrarSenha by remember { mutableStateOf(false) }
+    val viewModel: LoginViewModel by activity.viewModels()
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val textoUsuario = viewModel.textoUsuario.collectAsState()
+    val textoSenha = viewModel.textoSenha.collectAsState()
+    val mostrarSenha = viewModel.mostrarSenha.collectAsState()
 
     PLGTheme {
         Surface(
@@ -72,7 +85,7 @@ fun LoginScreen(activity: ComponentActivity, aoNavegarParaCustomizarInstrumento:
                 })
             { innerPadding ->
                 Box(Modifier.fillMaxSize())
-                     {
+                {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -87,10 +100,10 @@ fun LoginScreen(activity: ComponentActivity, aoNavegarParaCustomizarInstrumento:
                             contentDescription = ""
                         )
                         TextField(
-                            value = textoUsuario,
+                            value = textoUsuario.value,
 
                             onValueChange = {
-                                textoUsuario = it
+                                viewModel.digitarUsuario(it)
                             },
                             label = { Text("Usuário") },
                             singleLine = true,
@@ -103,14 +116,14 @@ fun LoginScreen(activity: ComponentActivity, aoNavegarParaCustomizarInstrumento:
                             }
                         )
                         TextField(
-                            value = textoSenha,
+                            value = textoSenha.value,
 
                             onValueChange = {
-                                textoSenha = it
+                                viewModel.digitarSenha(it)
                             },
                             label = { Text("Senha") },
                             singleLine = true,
-                            visualTransformation = if (mostrarSenha) VisualTransformation.None
+                            visualTransformation = if (mostrarSenha.value) VisualTransformation.None
                             else PasswordVisualTransformation(),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                             leadingIcon = {
@@ -124,32 +137,56 @@ fun LoginScreen(activity: ComponentActivity, aoNavegarParaCustomizarInstrumento:
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text("Mostrar senha", fontSize = 15.sp)
                             Checkbox(
-                                checked = mostrarSenha,
-                                onCheckedChange = { mostrarSenha = !mostrarSenha },
+                                checked = mostrarSenha.value,
+                                onCheckedChange = { viewModel.clicarMostrarSenha() },
                             )
                         }
-                        Button(modifier = Modifier.scale(1.2f)
-                            .padding(16.dp)
-                            , onClick = { aoNavegarParaCustomizarInstrumento() }) {
+                        Button(modifier = Modifier
+                            .scale(1.2f)
+                            .padding(16.dp),
+                            onClick = {
+                                coroutineScope.launch {
+                                    if (viewModel.autenticarLogin(
+                                            textoUsuario.value,
+                                            textoSenha.value
+                                        )
+                                    ) {
+                                        aoNavegarParaCustomizarInstrumento()
+                                    } else {
+                                        Toast.makeText(
+                                            activity,
+                                            "Usuário ou senha incorretos.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }
+                        ) {
                             Text("Entrar")
                         }
                     }
+
                     FloatingActionButton(
                         modifier = Modifier
                             .height(70.dp)
                             .width(190.dp)
                             .align(Alignment.BottomEnd)
                             .padding(16.dp),
-                        onClick = { /*TODO*/ }) {
+                        onClick = { aoNavegarParaCriarUsuario() }
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(imageVector = Icons.Sharp.Add, contentDescription = "icone de adicionar")
+                            Icon(
+                                imageVector = Icons.Sharp.Add,
+                                contentDescription = "icone de adicionar"
+                            )
                             Text(" Adicionar Usuário")
                         }
-
                     }
+
                 }
             }
         }
     }
+
 }
 
