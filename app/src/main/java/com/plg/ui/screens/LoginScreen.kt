@@ -33,24 +33,23 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.plg.R
 import com.plg.function
-import com.plg.model.Usuario
 import com.plg.ui.theme.PLGTheme
 import com.plg.ui.viewmodels.LoginViewModel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -59,7 +58,7 @@ import kotlinx.coroutines.launch
 fun LoginScreen(
     activity: ComponentActivity,
     aoNavegarParaCustomizarInstrumento: function,
-    aoNavegarParaCriarUsuario: function
+    aoNavegarParaCriarUsuario: function,
 ) {
 
     val viewModel: LoginViewModel by activity.viewModels()
@@ -113,7 +112,8 @@ fun LoginScreen(
                                     tint = Black,
                                     contentDescription = ""
                                 )
-                            }
+                            },
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                         )
                         TextField(
                             value = textoSenha.value,
@@ -125,7 +125,7 @@ fun LoginScreen(
                             singleLine = true,
                             visualTransformation = if (mostrarSenha.value) VisualTransformation.None
                             else PasswordVisualTransformation(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                             leadingIcon = {
                                 Icon(
                                     imageVector = Icons.Sharp.Lock,

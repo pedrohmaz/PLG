@@ -1,8 +1,8 @@
 package com.plg.ui.components
 
-import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -31,7 +31,9 @@ fun Navigator(activity: ComponentActivity) {
             )
         }
         composable("criarUsuario") {
-            CriarUsuarioScreen(activity)
+            CriarUsuarioScreen(activity = activity,
+                navController = navController
+                )
         }
         composable("customizarInstrumento") { CustomizarInstrumentoScreen(activity) }
     }

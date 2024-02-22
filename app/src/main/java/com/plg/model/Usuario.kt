@@ -3,7 +3,7 @@ package com.plg.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity()
+@Entity
 data class Usuario(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

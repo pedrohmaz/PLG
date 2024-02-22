@@ -19,4 +19,7 @@ interface UsuarioDao {
     @Query("SELECT * FROM usuario WHERE login = :nome AND senha = :senha ")
     fun confirmarUsuario(nome: String, senha: String): Flow<List<Usuario>>
 
+    @Query("SELECT * FROM usuario WHERE login = :nome ")
+    fun checarUsuarioExistente(nome: String): Flow<List<Usuario>>
+
 }

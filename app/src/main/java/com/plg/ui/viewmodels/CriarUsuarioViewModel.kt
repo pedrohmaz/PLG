@@ -7,7 +7,9 @@ import com.plg.database.AppDatabase
 import com.plg.model.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.lang.Character.isDigit
 
 class CriarUsuarioViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -18,18 +20,43 @@ class CriarUsuarioViewModel(application: Application) : AndroidViewModel(applica
     val textoUsuario: StateFlow<String> get() = _textoUsuario
     private val _textoSenha = MutableStateFlow("")
     val textoSenha: StateFlow<String> get() = _textoSenha
+    private val _textoErro = MutableStateFlow("")
+    val textoErro: StateFlow<String> get() = _textoErro
 
-    fun digitarUsuario(texto: String){
+    fun digitarUsuario(texto: String) {
         _textoUsuario.value = texto
     }
 
-    fun digitarSenha(texto: String){
-        _textoSenha.value = texto
+    fun digitarSenha(texto: String) {
+        _textoSenha.value = texto.replace(" ", "")
     }
 
-    fun salvarUsuario(usuario: Usuario){
-        viewModelScope.launch{
+    fun mostrarTextoAux(texto: String) {
+        _textoErro.value = texto
+    }
+
+    fun salvarUsuario(usuario: Usuario) {
+        viewModelScope.launch {
             dao.salvarUsuario(usuario)
         }
     }
+
+    suspend fun checarUsuarioNovo(nome: String): Boolean {
+        val usuarios = dao.checarUsuarioExistente(nome).first()
+        return usuarios.isEmpty()
+    }
+
+    fun resetarEstado() {
+        _textoUsuario.value = ""
+        _textoSenha.value = ""
+        _textoErro.value = ""
+
+    }
+
+    fun senhaValida(): Boolean {
+        return _textoSenha.value.length in 6..12 &&
+                _textoSenha.value.any { it.isDigit() } &&
+                _textoSenha.value.any { it.isUpperCase() }
+    }
+
 }
