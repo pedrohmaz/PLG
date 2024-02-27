@@ -33,6 +33,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,6 +51,7 @@ import androidx.navigation.NavHostController
 import com.plg.R
 import com.plg.function
 import com.plg.ui.theme.PLGTheme
+import com.plg.ui.viewmodels.GlobalViewModel
 import com.plg.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.launch
 
@@ -61,6 +64,7 @@ fun LoginScreen(
     aoNavegarParaCriarUsuario: function,
 ) {
 
+    val globalViewModel: GlobalViewModel by activity.viewModels()
     val viewModel: LoginViewModel by activity.viewModels()
 
     val coroutineScope = rememberCoroutineScope()
@@ -68,6 +72,7 @@ fun LoginScreen(
     val textoUsuario = viewModel.textoUsuario.collectAsState()
     val textoSenha = viewModel.textoSenha.collectAsState()
     val mostrarSenha = viewModel.mostrarSenha.collectAsState()
+
 
     PLGTheme {
         Surface(
@@ -125,7 +130,10 @@ fun LoginScreen(
                             singleLine = true,
                             visualTransformation = if (mostrarSenha.value) VisualTransformation.None
                             else PasswordVisualTransformation(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Password,
+                                imeAction = ImeAction.Done
+                            ),
                             leadingIcon = {
                                 Icon(
                                     imageVector = Icons.Sharp.Lock,
@@ -151,6 +159,7 @@ fun LoginScreen(
                                             textoSenha.value
                                         )
                                     ) {
+                                        globalViewModel.mudarUsuarioId(viewModel.obterIdUsuario(textoUsuario.value))
                                         aoNavegarParaCustomizarInstrumento()
                                     } else {
                                         Toast.makeText(
@@ -165,7 +174,6 @@ fun LoginScreen(
                             Text("Entrar")
                         }
                     }
-
                     FloatingActionButton(
                         modifier = Modifier
                             .height(70.dp)

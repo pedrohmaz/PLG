@@ -159,7 +159,7 @@ fun CriarUsuarioScreen(activity: ComponentActivity, navController: NavHostContro
                         Text(
                             modifier = Modifier.offset(x = (-8).dp, y = 16.dp),
                             text = textoAux.value,
-                            color = Color.Red,
+                            color = Red,
                             fontSize = 14.sp
                         )
                     }

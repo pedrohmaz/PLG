@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.plg.model.Guitarra
 import com.plg.model.Usuario
 
-@Database([Usuario::class], version = 1)
+@Database([Usuario::class, Guitarra::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 abstract fun usuarioDao(): UsuarioDao
+abstract fun guitarraDao(): GuitarraDao
 
     companion object {
         @Volatile
@@ -20,11 +22,14 @@ abstract fun usuarioDao(): UsuarioDao
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                    .build()
                 INSTANCIA = instance
                 instance
             }
         }
     }
+
+
 
 }

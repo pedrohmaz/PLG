@@ -2,8 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
-
 }
+
 
 android {
     namespace = "com.plg"
@@ -20,6 +20,14 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                arguments += mapOf(
+//                    "room.schemaLocation" to "$projectDir/schemas",
+//                    "room.incremental" to "true"
+//                )
+//            }
+       // }
     }
 
     buildTypes {
@@ -52,6 +60,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
@@ -67,6 +76,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
+
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

@@ -1,7 +1,6 @@
 package com.plg.ui.viewmodels
 
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.lifecycle.ViewModel
 import com.plg.R
 import com.plg.ui.components.BotaoSelecionado
@@ -12,7 +11,8 @@ import com.plg.ui.theme.CorMarcacaoClara
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class CustomizarInstrumentoViewModel : ViewModel() {
+class CustomizarInstrumentoViewModel() : ViewModel() {
+
 
     private val _corpo = MutableStateFlow(R.drawable.strato_corpo)
     val corpo: StateFlow<Int> get() = _corpo
@@ -26,16 +26,16 @@ class CustomizarInstrumentoViewModel : ViewModel() {
     val marcacoes: StateFlow<Int> get() = _marcacoes
     private val _pecas = MutableStateFlow(R.drawable.strato_pecas)
     val pecas: StateFlow<Int> get() = _pecas
-    private val _corCorpo = MutableStateFlow(ColorFilter.tint(CorCorpoVermelho))
-    val corCorpo: StateFlow<ColorFilter> get() = _corCorpo
-    private val _corBraco = MutableStateFlow(ColorFilter.tint(CorEscalaEscura))
-    val corBraco: StateFlow<ColorFilter> get() = _corBraco
-    private val _corHeadstock = MutableStateFlow(ColorFilter.tint(CorMarcacaoClara))
-    val corHeadstock: StateFlow<ColorFilter> get() = _corHeadstock
-    private val _corEscudo = MutableStateFlow(ColorFilter.tint(CorEscudoOriginal))
-    val corEscudo: StateFlow<ColorFilter> get() = _corEscudo
-    private val _corMarcacoes = MutableStateFlow(ColorFilter.tint(CorMarcacaoClara))
-    val corMarcacoes: StateFlow<ColorFilter> get() = _corMarcacoes
+    private val _corCorpo = MutableStateFlow(CorCorpoVermelho)
+    val corCorpo: StateFlow<Color> get() = _corCorpo
+    private val _corBraco = MutableStateFlow(CorEscalaEscura)
+    val corBraco: StateFlow<Color> get() = _corBraco
+    private val _corHeadstock = MutableStateFlow(CorMarcacaoClara)
+    val corHeadstock: StateFlow<Color> get() = _corHeadstock
+    private val _corEscudo = MutableStateFlow(CorEscudoOriginal)
+    val corEscudo: StateFlow<Color> get() = _corEscudo
+    private val _corMarcacoes = MutableStateFlow(CorMarcacaoClara)
+    val corMarcacoes: StateFlow<Color> get() = _corMarcacoes
     private val _botaoSelecionado = MutableStateFlow(BotaoSelecionado.Corpo)
     val botaoSelecionado: StateFlow<BotaoSelecionado> get() = _botaoSelecionado
 
@@ -97,29 +97,29 @@ class CustomizarInstrumentoViewModel : ViewModel() {
 
 
     private fun trocarCorCorpo(cor: Color, valor: Float) {
-        _corCorpo.value = ColorFilter.tint(cor)
+        _corCorpo.value = cor
     }
 
     private fun trocarCorEscudo(cor: Color, valor: Float) {
-        _corEscudo.value = ColorFilter.tint(cor)
+        _corEscudo.value = cor
         _valorEscudo.value = valor
         _valorTotal.value = atualizarValorTotal()
     }
 
     private fun trocarCorHeadstock(cor: Color, valor: Float) {
-        _corHeadstock.value = ColorFilter.tint(cor)
+        _corHeadstock.value = cor
         _valorHeadstock.value = valor
         _valorTotal.value = atualizarValorTotal()
     }
 
     private fun trocarCorBraco(cor: Color, valor: Float) {
-        _corBraco.value = ColorFilter.tint(cor)
+        _corBraco.value = cor
         _valorEscala.value = valor
         _valorTotal.value = atualizarValorTotal()
     }
 
     private fun trocarCorMarcacoes(cor: Color, valor: Float) {
-        _corMarcacoes.value = ColorFilter.tint(cor)
+        _corMarcacoes.value = cor
     }
 
     fun trocarModelo() {
@@ -157,6 +157,5 @@ class CustomizarInstrumentoViewModel : ViewModel() {
             BotaoSelecionado.Marcacoes -> ::trocarCorMarcacoes
         }
     }
-
 
 }

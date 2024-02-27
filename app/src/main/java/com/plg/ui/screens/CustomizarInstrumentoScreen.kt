@@ -37,9 +37,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.plg.formatarParaReal
 import com.plg.function
 import com.plg.ui.components.BotaoSelecionado
 import com.plg.ui.components.GuitarraImagem
@@ -51,15 +53,19 @@ import com.plg.ui.components.MenuCoresMarcacoes
 import com.plg.ui.components.MenuPartes
 import com.plg.ui.theme.PLGTheme
 import com.plg.ui.viewmodels.CustomizarInstrumentoViewModel
+import com.plg.ui.viewmodels.GlobalViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CustomizarInstrumentoScreen(activity: ComponentActivity) {
-
+fun CustomizarInstrumentoScreen(
+    activity: ComponentActivity,
+    aoNavegarParaSalvarInstrumento: (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Float, Long) -> Unit
+) {
+    val globalViewModel: GlobalViewModel by activity.viewModels()
     val viewModel: CustomizarInstrumentoViewModel by activity.viewModels()
 
-
+    val usuarioId by globalViewModel.usuarioId.collectAsState()
     val parteSelecionada = remember { viewModel.trocarParteSelecionada() }
     val menuCores: MutableState<@Composable function> =
         remember { mutableStateOf(@Composable { MenuCoresCorpo(parteSelecionada) }) }
@@ -127,6 +133,8 @@ fun CustomizarInstrumentoScreen(activity: ComponentActivity) {
                 modifier = Modifier
                     .fillMaxSize(),
             ) {
+                Text(modifier = Modifier.align(Alignment.TopStart), text = "$usuarioId")
+
                 GuitarraImagem(
                     corpo.value,
                     braco.value,
@@ -136,11 +144,11 @@ fun CustomizarInstrumentoScreen(activity: ComponentActivity) {
                     pecas.value,
                     corCorpo.value,
                     corBraco.value,
-                    corMarcacoes.value,
-                    corEscudo.value,
                     corHeadstock.value,
+                    corEscudo.value,
+                    corMarcacoes.value,
                     modifier = Modifier
-                        .scale(if (isHorizontal) 1.5f else 1.2f)
+                        .scale(if (isHorizontal) 1.5f else 1.1f)
                         .rotate(
                             if (isHorizontal) 90f
                             else 0f
@@ -164,12 +172,29 @@ fun CustomizarInstrumentoScreen(activity: ComponentActivity) {
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(16.dp),
-                    onClick = {  }) {
+                    onClick = {
+
+                        aoNavegarParaSalvarInstrumento(
+                            corpo.value,
+                            braco.value,
+                            headstock.value,
+                            escudo.value,
+                            marcacoes.value,
+                            pecas.value,
+                            corCorpo.value.toArgb(),
+                            corBraco.value.toArgb(),
+                            corHeadstock.value.toArgb(),
+                            corEscudo.value.toArgb(),
+                            corMarcacoes.value.toArgb(),
+                            valor,
+                            usuarioId
+                        )
+                    }) {
                     Row {
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             modifier = Modifier.align(Alignment.CenterVertically),
-                            text = " R\$${valor} ",
+                            text = " ${formatarParaReal(valor)} ",
                             fontSize = 16.sp
                         )
                         Icon(
@@ -217,11 +242,11 @@ fun CustomizarInstrumentoScreen(activity: ComponentActivity) {
                         corFuncao = ::escolherCorDoBotao
                     )
                 }
-
             }
         }
     }
 }
+
 
 
 

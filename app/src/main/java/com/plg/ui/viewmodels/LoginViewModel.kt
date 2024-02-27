@@ -31,6 +31,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         _mostrarSenha.value = !_mostrarSenha.value
     }
 
+    suspend fun obterIdUsuario(nome: String) : Long {
+        return dao.checarUsuarioExistente(nome).first()[0].id
+    }
 
     suspend fun autenticarLogin(nome: String, senha: String): Boolean {
         val usuarios = dao.confirmarUsuario(nome, senha).first()
