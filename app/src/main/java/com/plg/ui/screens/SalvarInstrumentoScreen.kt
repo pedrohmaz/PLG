@@ -61,7 +61,7 @@ fun SalvarInstrumentoScreen(
             topBar = {
                 TopAppBar(
                     title = { Text("Salvar Instrumento") },
-                    colors = TopAppBarDefaults.mediumTopAppBarColors
+                    colors = TopAppBarDefaults.smallTopAppBarColors
                         (MaterialTheme.colorScheme.primary)
                 )
             }

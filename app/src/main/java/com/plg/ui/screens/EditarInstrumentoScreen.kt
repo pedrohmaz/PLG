@@ -1,6 +1,7 @@
 package com.plg.ui.screens
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.compose.foundation.gestures.rememberTransformableState
@@ -22,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.plg.formatarParaReal
 import com.plg.function
+import com.plg.model.Guitarra
 import com.plg.ui.components.BotaoSelecionado
 import com.plg.ui.components.GuitarraImagem
 import com.plg.ui.components.MenuCoresBraco
@@ -51,23 +54,46 @@ import com.plg.ui.components.MenuCoresHeadstock
 import com.plg.ui.components.MenuCoresMarcacoes
 import com.plg.ui.components.MenuPartes
 import com.plg.ui.theme.PLGTheme
-import com.plg.ui.viewmodels.CustomizarInstrumentoViewModel
+import com.plg.ui.viewmodels.EditarInstrumentoViewModel
 import com.plg.ui.viewmodels.GlobalViewModel
 
 
 @Composable
-fun CustomizarInstrumentoScreen(
+fun EditarInstrumentoScreen(
     activity: ComponentActivity,
     aoNavegarParaSalvarInstrumento: (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Float, Long) -> Unit
 ) {
     val globalViewModel: GlobalViewModel by activity.viewModels()
-    val viewModel: CustomizarInstrumentoViewModel by activity.viewModels()
-
-    val usuarioId by globalViewModel.usuarioId.collectAsState()
+    val viewModel: EditarInstrumentoViewModel by activity.viewModels()
+    val usuarioId = globalViewModel.usuarioId.collectAsState()
+    val guitarraId = globalViewModel.guitarraId.collectAsState()
     val parteSelecionada = remember { viewModel.trocarParteSelecionada() }
     val menuCores: MutableState<@Composable function> =
         remember { mutableStateOf(@Composable { MenuCoresCorpo(parteSelecionada) }) }
     val botaoSelecionado = viewModel.botaoSelecionado.collectAsState()
+    var guitarra by remember {
+        mutableStateOf<Guitarra?>(null)
+    }
+
+LaunchedEffect(Unit){
+    guitarra = viewModel.guitarraDao.buscarGuitarraPorId(guitarraId.value)
+    Log.i("TAG", "EditarInstrumentoScreen: ")
+            guitarra?.let {guitarra ->
+                viewModel.definirDesenhoInicial(
+                    guitarra.corpo,
+                    guitarra.braco,
+                    guitarra.headstock,
+                    guitarra.escudo,
+                    guitarra.marcacoes,
+                    guitarra.pecas,
+                    guitarra.corCorpo,
+                    guitarra.corBraco,
+                    guitarra.corHeadstock,
+                    guitarra.corEscudo,
+                    guitarra.corMarcacoes
+                )
+            }
+    }
 
 
     fun trocarMenuCores() {
@@ -132,8 +158,6 @@ fun CustomizarInstrumentoScreen(
                 modifier = Modifier
                     .fillMaxSize(),
             ) {
-                Text(modifier = Modifier.align(Alignment.TopStart), text = "$usuarioId")
-
                 GuitarraImagem(
                     corpo.value,
                     braco.value,
@@ -186,7 +210,7 @@ fun CustomizarInstrumentoScreen(
                             corEscudo.value.toArgb(),
                             corMarcacoes.value.toArgb(),
                             valor,
-                            usuarioId
+                            usuarioId.value
                         )
                     }) {
                     Row {
@@ -245,11 +269,3 @@ fun CustomizarInstrumentoScreen(
         }
     }
 }
-
-
-
-
-
-
-
-

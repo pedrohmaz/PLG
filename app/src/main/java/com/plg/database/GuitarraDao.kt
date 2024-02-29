@@ -1,6 +1,7 @@
 package com.plg.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -18,5 +19,8 @@ interface GuitarraDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun salvarGuitarra(guitarra: Guitarra) : Long
+
+    @Delete
+    suspend fun removerrGuitarra(guitarra: Guitarra)
 
 }

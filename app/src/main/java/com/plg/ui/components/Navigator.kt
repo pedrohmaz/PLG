@@ -9,6 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.plg.ui.screens.CriarUsuarioScreen
 import com.plg.ui.screens.CustomizarInstrumentoScreen
+import com.plg.ui.screens.DetalhesInstrumentoScreen
+import com.plg.ui.screens.EditarInstrumentoScreen
 import com.plg.ui.screens.ListaGuitarrasScreen
 import com.plg.ui.screens.LoginScreen
 import com.plg.ui.screens.SalvarInstrumentoScreen
@@ -18,7 +20,7 @@ fun Navigator(activity: ComponentActivity) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = "customizarInstrumento"
+        startDestination = "listaGuitarras"
     )
     {
         composable("login") {
@@ -43,7 +45,8 @@ fun Navigator(activity: ComponentActivity) {
             CustomizarInstrumentoScreen(
                 activity,
                 aoNavegarParaSalvarInstrumento = { a, b, c, d, e, f, g, h, i, j, k, l, m ->
-                    navController.navigate("salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m")
+                    navController.navigate(
+                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m")
                 })
         }
         composable("salvarInstrumento/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}/{j}/{k}/{l}/{m}",
@@ -100,7 +103,34 @@ fun Navigator(activity: ComponentActivity) {
         }
 
         composable("listaGuitarras") {
-            ListaGuitarrasScreen(activity = activity)
+            ListaGuitarrasScreen(activity = activity,
+                aoNavegarParaDetalhesInstrumento = { id ->
+                    navController.navigate("detalhesInstrumento/$id")
+                }
+            )
+        }
+
+        composable(
+            "detalhesInstrumento/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getLong("id") ?: 0
+            DetalhesInstrumentoScreen(
+                activity,
+                navController,
+                guitarraId = id,
+                aoNavegarParaEditarInstrumento = {
+                    navController.navigate("editarInstrumento")
+                })
+        }
+
+        composable("editarInstrumento") {
+            EditarInstrumentoScreen(
+                activity = activity,
+                aoNavegarParaSalvarInstrumento = { a, b, c, d, e, f, g, h, i, j, k, l, m ->
+                    navController.navigate(
+                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m")
+                })
         }
     }
 }
