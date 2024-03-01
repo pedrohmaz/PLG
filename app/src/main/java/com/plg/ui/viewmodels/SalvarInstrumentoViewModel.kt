@@ -21,8 +21,10 @@ class SalvarInstrumentoViewModel(application: Application): AndroidViewModel(app
         }
     }
 
-    fun mudarTexto(texto: String){
-        _textoNome.value = texto
+    fun mudarTexto(texto: String?){
+        if (texto != null) {
+            _textoNome.value = texto
+        }
     }
 
 }

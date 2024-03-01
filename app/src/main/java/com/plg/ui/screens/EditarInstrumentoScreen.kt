@@ -61,7 +61,7 @@ import com.plg.ui.viewmodels.GlobalViewModel
 @Composable
 fun EditarInstrumentoScreen(
     activity: ComponentActivity,
-    aoNavegarParaSalvarInstrumento: (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Float, Long) -> Unit
+    aoNavegarParaSalvarInstrumento: (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Float, Float, Float, Float, Float, String, Long) -> Unit
 ) {
     val globalViewModel: GlobalViewModel by activity.viewModels()
     val viewModel: EditarInstrumentoViewModel by activity.viewModels()
@@ -90,7 +90,13 @@ LaunchedEffect(Unit){
                     guitarra.corBraco,
                     guitarra.corHeadstock,
                     guitarra.corEscudo,
-                    guitarra.corMarcacoes
+                    guitarra.corMarcacoes,
+                    guitarra.valor,
+                    guitarra.valorModelo,
+                    guitarra.valorEscala,
+                    guitarra.valorHeadstock,
+                    guitarra.valorEscudo
+
                 )
             }
     }
@@ -210,6 +216,11 @@ LaunchedEffect(Unit){
                             corEscudo.value.toArgb(),
                             corMarcacoes.value.toArgb(),
                             valor,
+                            viewModel.buscarValor(viewModel.valorModelo),
+                            viewModel.buscarValor(viewModel.valorEscala),
+                            viewModel.buscarValor(viewModel.valorHeadstock),
+                            viewModel.buscarValor(viewModel.valorEscudo),
+                            guitarra!!.nome,
                             usuarioId.value
                         )
                     }) {

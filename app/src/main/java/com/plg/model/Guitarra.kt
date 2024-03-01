@@ -16,8 +16,12 @@ data class Guitarra(
     val corHeadstock: Int,
     val corEscudo: Int,
     val corMarcacoes: Int,
-    val nome: String = "",
     val valor: Float = 0f,
+    val valorModelo: Float = 0f,
+    val valorEscala: Float = 0f,
+    val valorHeadstock: Float = 0f,
+    val valorEscudo: Float = 0f,
+    val nome: String = "",
     val usuario: Long = 0,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 )

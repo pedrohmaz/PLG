@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -58,7 +59,10 @@ import com.plg.ui.viewmodels.GlobalViewModel
 @Composable
 fun CustomizarInstrumentoScreen(
     activity: ComponentActivity,
-    aoNavegarParaSalvarInstrumento: (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Float, Long) -> Unit
+    aoNavegarParaSalvarInstrumento: (
+        Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int,
+        Float, Float, Float, Float, Float, String, Long
+    ) -> Unit
 ) {
     val globalViewModel: GlobalViewModel by activity.viewModels()
     val viewModel: CustomizarInstrumentoViewModel by activity.viewModels()
@@ -121,6 +125,10 @@ fun CustomizarInstrumentoScreen(
         scale *= zoomChange
         // rotation += rotationChange
         offset += offsetChange
+    }
+
+    LaunchedEffect(Unit){
+        globalViewModel.mudarGuitarraId(0)
     }
 
     PLGTheme {
@@ -186,6 +194,11 @@ fun CustomizarInstrumentoScreen(
                             corEscudo.value.toArgb(),
                             corMarcacoes.value.toArgb(),
                             valor,
+                            viewModel.buscarValor(viewModel.valorModelo),
+                            viewModel.buscarValor(viewModel.valorEscala),
+                            viewModel.buscarValor(viewModel.valorHeadstock),
+                            viewModel.buscarValor(viewModel.valorEscudo),
+                            "blank",
                             usuarioId
                         )
                     }) {

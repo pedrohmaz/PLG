@@ -49,9 +49,13 @@ class EditarInstrumentoViewModel(application: Application) : AndroidViewModel(ap
     val botaoSelecionado: StateFlow<BotaoSelecionado> get() = _botaoSelecionado
 
     private val _valorModelo = MutableStateFlow(2000f)
-    private val _valorHeadstock = MutableStateFlow(0f)
-    private val _valorEscala = MutableStateFlow(100f)
+    val valorModelo: StateFlow<Float> get() = _valorModelo
+    private val _valorEscala = MutableStateFlow(0f)
+    val valorEscala: StateFlow<Float> get() = _valorEscala
+    private val _valorHeadstock = MutableStateFlow(100f)
+    val valorHeadstock: StateFlow<Float> get() = _valorHeadstock
     private val _valorEscudo = MutableStateFlow(200f)
+    val valorEscudo: StateFlow<Float> get() = _valorEscudo
     private val _valorTotal = MutableStateFlow(atualizarValorTotal())
     val valorTotal: StateFlow<Float> get() = _valorTotal
 
@@ -167,9 +171,12 @@ class EditarInstrumentoViewModel(application: Application) : AndroidViewModel(ap
         }
     }
 
-    fun definirDesenhoInicial(corpo: Int, braco: Int, headstock: Int, escudo: Int, marcacoes: Int,
-                              pecas: Int, corCorpo: Int, corBraco: Int, corHeadstock: Int,
-                              corEscudo: Int, corMarcacoes: Int){
+    fun definirDesenhoInicial(
+        corpo: Int, braco: Int, headstock: Int, escudo: Int, marcacoes: Int,
+        pecas: Int, corCorpo: Int, corBraco: Int, corHeadstock: Int,
+        corEscudo: Int, corMarcacoes: Int, valor: Float, valorModelo: Float,
+        valorEscala: Float, valorHeadstock: Float, valorEscudo: Float
+    ) {
         _corpo.value = corpo
         _braco.value = braco
         _headstock.value = headstock
@@ -181,9 +188,19 @@ class EditarInstrumentoViewModel(application: Application) : AndroidViewModel(ap
         _corHeadstock.value = Color(corHeadstock)
         _corEscudo.value = Color(corEscudo)
         _corMarcacoes.value = Color(corMarcacoes)
-        modeloGuit = if (_corpo.value == R.drawable.strato_corpo){
+        modeloGuit = if (_corpo.value == R.drawable.strato_corpo) {
             GuitarraModelos.Strato
         } else GuitarraModelos.Tele
+        _valorTotal.value = valor
+        _valorModelo.value = valorModelo
+        _valorEscala.value = valorEscala
+        _valorHeadstock.value = valorHeadstock
+        _valorEscudo.value = valorEscudo
+        atualizarValorTotal()
+    }
+
+    fun buscarValor(valor: StateFlow<Float>) : Float{
+        return valor.value
     }
 
 }

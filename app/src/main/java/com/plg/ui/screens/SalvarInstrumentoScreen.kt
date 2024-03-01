@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -39,6 +40,7 @@ import com.plg.function
 import com.plg.model.Guitarra
 import com.plg.ui.components.GuitarraImagem
 import com.plg.ui.theme.PLGTheme
+import com.plg.ui.viewmodels.GlobalViewModel
 import com.plg.ui.viewmodels.SalvarInstrumentoViewModel
 
 
@@ -50,12 +52,18 @@ fun SalvarInstrumentoScreen(
     aoNavegarParaListaGuitarras: function,
     a: Int, b: Int, c: Int, d: Int, e: Int,
     f: Int, g: Int, h: Int, i: Int, j: Int,
-    k: Int, valor: Float, usuario: Long
+    k: Int, l: Float, m: Float, n: Float, o: Float, p: Float, q: String, r: Long
 ) {
 
     val viewModel: SalvarInstrumentoViewModel by activity.viewModels()
+    val globalViewModel: GlobalViewModel by activity.viewModels()
+    val textoNome by viewModel.textoNome.collectAsState()
 
-
+LaunchedEffect(Unit){
+    viewModel.mudarTexto(q)
+    if (q != "blank") viewModel.mudarTexto(q)
+    else viewModel.mudarTexto("")
+}
     PLGTheme {
         Scaffold(
             topBar = {
@@ -78,7 +86,8 @@ fun SalvarInstrumentoScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    val textoNome by viewModel.textoNome.collectAsState()
+
+
                     Text(
                         text = "Dê um nome para este instrumento:",
                         fontSize = 18.sp
@@ -87,7 +96,7 @@ fun SalvarInstrumentoScreen(
                         modifier = Modifier.height(52.dp),
                         singleLine = true,
                         value = textoNome,
-                        onValueChange = {textoNovo ->
+                        onValueChange = { textoNovo ->
                             val textoAntigo = textoNome
                             if (textoNovo.length <= 20) viewModel.mudarTexto(textoNovo)
                             else viewModel.mudarTexto(textoAntigo)
@@ -111,7 +120,7 @@ fun SalvarInstrumentoScreen(
 
                     )
                     Text(
-                        text = "Valor final: ${formatarParaReal(valor)}",
+                        text = "Valor final: ${formatarParaReal(l)}",
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
@@ -129,9 +138,9 @@ fun SalvarInstrumentoScreen(
                         }
                         Button(onClick = {
                             var nome = textoNome
-                            if(nome.isBlank()) nome = "Minha Guitarra"
+                            if (nome.isBlank()) nome = "Minha Guitarra"
                             val guitarra = Guitarra(
-                                a, b, c, d, e, f, g, h, i, j, k, nome, valor, usuario
+                                a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, nome, r, globalViewModel.guitarraId.value
                             )
                             viewModel.salvarGuitarra(guitarra)
                             Toast.makeText(activity, "Guitarra salva.", Toast.LENGTH_SHORT)

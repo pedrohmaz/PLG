@@ -20,7 +20,7 @@ fun Navigator(activity: ComponentActivity) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = "listaGuitarras"
+        startDestination = "customizarInstrumento"
     )
     {
         composable("login") {
@@ -44,12 +44,14 @@ fun Navigator(activity: ComponentActivity) {
         composable("customizarInstrumento") {
             CustomizarInstrumentoScreen(
                 activity,
-                aoNavegarParaSalvarInstrumento = { a, b, c, d, e, f, g, h, i, j, k, l, m ->
+                aoNavegarParaSalvarInstrumento = { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r ->
                     navController.navigate(
-                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m")
+                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r"
+                    )
                 })
         }
-        composable("salvarInstrumento/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}/{j}/{k}/{l}/{m}",
+        composable(
+            "salvarInstrumento/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}/{j}/{k}/{l}/{m}/{n}/{o}/{p}/{q}/{r}",
             arguments = listOf(
                 navArgument("a") { type = NavType.IntType },
                 navArgument("b") { type = NavType.IntType },
@@ -63,7 +65,12 @@ fun Navigator(activity: ComponentActivity) {
                 navArgument("j") { type = NavType.IntType },
                 navArgument("k") { type = NavType.IntType },
                 navArgument("l") { type = NavType.FloatType },
-                navArgument("m") { type = NavType.LongType }
+                navArgument("m") { type = NavType.FloatType },
+                navArgument("n") { type = NavType.FloatType },
+                navArgument("o") { type = NavType.FloatType },
+                navArgument("p") { type = NavType.FloatType },
+                navArgument("q") { type = NavType.StringType },
+                navArgument("r") { type = NavType.LongType }
             )
         ) { backStackEntry ->
             val a = backStackEntry.arguments?.getInt("a") ?: 0
@@ -78,12 +85,18 @@ fun Navigator(activity: ComponentActivity) {
             val j = backStackEntry.arguments?.getInt("j") ?: 0
             val k = backStackEntry.arguments?.getInt("k") ?: 0
             val l = backStackEntry.arguments?.getFloat("l") ?: 0f
-            val m = backStackEntry.arguments?.getLong("m") ?: 0
+            val m = backStackEntry.arguments?.getFloat("m") ?: 0f
+            val n = backStackEntry.arguments?.getFloat("n") ?: 0f
+            val o = backStackEntry.arguments?.getFloat("o") ?: 0f
+            val p = backStackEntry.arguments?.getFloat("p") ?: 0f
+            val q = backStackEntry.arguments?.getString("q") ?: ""
+            val r = backStackEntry.arguments?.getLong("r") ?: 0
 
             SalvarInstrumentoScreen(
                 activity = activity,
                 navController = navController,
                 aoNavegarParaListaGuitarras = {
+                    navController.popBackStack()
                     navController.navigate("listaGuitarras")
                 },
                 a = a,
@@ -97,8 +110,13 @@ fun Navigator(activity: ComponentActivity) {
                 i = i,
                 j = j,
                 k = k,
-                valor = l,
-                usuario = m
+                l = l,
+                m = m,
+                n = n,
+                o = o,
+                p = p,
+                q = q,
+                r = r
             )
         }
 
@@ -127,9 +145,10 @@ fun Navigator(activity: ComponentActivity) {
         composable("editarInstrumento") {
             EditarInstrumentoScreen(
                 activity = activity,
-                aoNavegarParaSalvarInstrumento = { a, b, c, d, e, f, g, h, i, j, k, l, m ->
+                aoNavegarParaSalvarInstrumento = { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r ->
                     navController.navigate(
-                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m")
+                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r"
+                    )
                 })
         }
     }

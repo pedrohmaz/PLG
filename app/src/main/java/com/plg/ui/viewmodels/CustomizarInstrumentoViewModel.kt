@@ -40,9 +40,13 @@ class CustomizarInstrumentoViewModel() : ViewModel() {
     val botaoSelecionado: StateFlow<BotaoSelecionado> get() = _botaoSelecionado
 
     private val _valorModelo = MutableStateFlow(2000f)
-    private val _valorHeadstock = MutableStateFlow(0f)
-    private val _valorEscala = MutableStateFlow(100f)
+    val valorModelo: StateFlow<Float> get() = _valorModelo
+    private val _valorEscala = MutableStateFlow(0f)
+    val valorEscala: StateFlow<Float> get() = _valorEscala
+    private val _valorHeadstock = MutableStateFlow(100f)
+    val valorHeadstock: StateFlow<Float> get() = _valorHeadstock
     private val _valorEscudo = MutableStateFlow(200f)
+    val valorEscudo: StateFlow<Float> get() = _valorEscudo
     private val _valorTotal = MutableStateFlow(atualizarValorTotal())
     val valorTotal: StateFlow<Float> get() = _valorTotal
 
@@ -156,6 +160,10 @@ class CustomizarInstrumentoViewModel() : ViewModel() {
             BotaoSelecionado.Escudo -> ::trocarCorEscudo
             BotaoSelecionado.Marcacoes -> ::trocarCorMarcacoes
         }
+    }
+
+    fun buscarValor(valor: StateFlow<Float>) : Float{
+        return valor.value
     }
 
 }
