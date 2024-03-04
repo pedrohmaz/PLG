@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.sharp.Refresh
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -59,6 +61,7 @@ import com.plg.ui.viewmodels.GlobalViewModel
 @Composable
 fun CustomizarInstrumentoScreen(
     activity: ComponentActivity,
+    aoNavegarParaListaGuitarras: function,
     aoNavegarParaSalvarInstrumento: (
         Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int,
         Float, Float, Float, Float, Float, String, Long
@@ -68,6 +71,7 @@ fun CustomizarInstrumentoScreen(
     val viewModel: CustomizarInstrumentoViewModel by activity.viewModels()
 
     val usuarioId by globalViewModel.usuarioId.collectAsState()
+
     val parteSelecionada = remember { viewModel.trocarParteSelecionada() }
     val menuCores: MutableState<@Composable function> =
         remember { mutableStateOf(@Composable { MenuCoresCorpo(parteSelecionada) }) }
@@ -140,8 +144,6 @@ fun CustomizarInstrumentoScreen(
                 modifier = Modifier
                     .fillMaxSize(),
             ) {
-                Text(modifier = Modifier.align(Alignment.TopStart), text = "$usuarioId")
-
                 GuitarraImagem(
                     corpo.value,
                     braco.value,
@@ -176,9 +178,15 @@ fun CustomizarInstrumentoScreen(
                     //.background(Blue)
                 )
                 FloatingActionButton(
+                    modifier = Modifier.padding(16.dp),
+                    onClick = { aoNavegarParaListaGuitarras() }) {
+                    Icon(imageVector = Icons.Default.List, contentDescription = "Lista")
+                }
+                FloatingActionButton(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(16.dp),
+                        .padding(16.dp)
+                        .height(40.dp),
                     onClick = {
 
                         aoNavegarParaSalvarInstrumento(
@@ -203,17 +211,17 @@ fun CustomizarInstrumentoScreen(
                         )
                     }) {
                     Row {
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             modifier = Modifier.align(Alignment.CenterVertically),
                             text = " ${formatarParaReal(valor)} ",
-                            fontSize = 16.sp
+                            fontSize = 14.sp
                         )
                         Icon(
                             imageVector = Icons.Default.ArrowForward,
                             contentDescription = "Botão valor / ir para tela 'salvar pedido'"
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
                     }
                 }
                 FloatingActionButton(

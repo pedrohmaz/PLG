@@ -154,23 +154,29 @@ fun LoginScreen(
                             .padding(16.dp),
                             onClick = {
                                 coroutineScope.launch {
-                                    if (viewModel.autenticarLogin(
-                                            textoUsuario.value,
-                                            textoSenha.value
-                                        )
-                                    ) {
-                                        globalViewModel.mudarUsuarioId(viewModel.obterIdUsuario(textoUsuario.value))
-                                        aoNavegarParaCustomizarInstrumento()
-                                    } else {
-                                        Toast.makeText(
-                                            activity,
-                                            "Usuário ou senha incorretos.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                    viewModel.autenticarLogin(
+                                        textoUsuario.value,
+                                        textoSenha.value,
+                                        context = activity
+                                    ) { sucesso ->
+                                        coroutineScope.launch {
+                                            if (sucesso) {
+                                                globalViewModel.mudarUsuarioId(
+                                                    viewModel.obterIdUsuario(textoUsuario.value)
+                                                )
+                                                aoNavegarParaCustomizarInstrumento()
+                                            } else {
+                                                Toast.makeText(
+                                                    activity,
+                                                    "Usuário ou senha incorretos.",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        ) {
+                            })
+                        {
                             Text("Entrar")
                         }
                     }
@@ -190,11 +196,10 @@ fun LoginScreen(
                             Text(" Adicionar Usuário")
                         }
                     }
-
                 }
             }
         }
     }
-
 }
+
 

@@ -3,6 +3,8 @@ package com.plg.ui.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import com.plg.database.AppDatabase
 import com.plg.model.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +16,7 @@ class CriarUsuarioViewModel(application: Application) : AndroidViewModel(applica
 
 
     private val dao = AppDatabase.instancia(application).usuarioDao()
+    private val remoteDb = Firebase.firestore
 
     private val _textoUsuario = MutableStateFlow("")
     val textoUsuario: StateFlow<String> get() = _textoUsuario
@@ -36,7 +39,8 @@ class CriarUsuarioViewModel(application: Application) : AndroidViewModel(applica
 
     fun salvarUsuario(usuario: Usuario) {
         viewModelScope.launch {
-            dao.salvarUsuario(usuario)
+            val id = dao.salvarUsuario(usuario)
+            remoteDb.collection("Usuarios").add(dao.buscarUsuario(id).first())
         }
     }
 

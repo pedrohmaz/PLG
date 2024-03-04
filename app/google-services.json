@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "374761605907",
+    "project_id": "plg---customshop",
+    "storage_bucket": "plg---customshop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374761605907:android:d578ecf1badd817f50a8e6",
+        "android_client_info": {
+          "package_name": "com.plg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrzTZNdemRweoxuRfZr1acnd9RQ5v-Moc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

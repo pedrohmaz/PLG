@@ -1,7 +1,6 @@
 package com.plg.ui.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.plg.database.AppDatabase
@@ -17,9 +16,9 @@ class ListaGuitarrasViewModel(application: Application) : AndroidViewModel(appli
     private val guitarraDao = AppDatabase.instancia(application).guitarraDao()
     private val _listaGuitarras = MutableStateFlow<List<Guitarra>>(emptyList())
     val listaGuitarras: StateFlow<List<Guitarra>> get() = _listaGuitarras
-    fun atualizarLista(){
+    fun atualizarLista(id: Long){
         viewModelScope.launch {
-            _listaGuitarras.value = guitarraDao.buscarTodasAsGuitarras().first()
+            _listaGuitarras.value = guitarraDao.buscarGuitarrasDoUsuario(id).first()
         }
     }
 

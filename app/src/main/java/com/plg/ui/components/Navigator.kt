@@ -20,7 +20,7 @@ fun Navigator(activity: ComponentActivity) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = "customizarInstrumento"
+        startDestination = "login"
     )
     {
         composable("login") {
@@ -44,6 +44,7 @@ fun Navigator(activity: ComponentActivity) {
         composable("customizarInstrumento") {
             CustomizarInstrumentoScreen(
                 activity,
+                aoNavegarParaListaGuitarras = { navController.navigate("listaGuitarras") },
                 aoNavegarParaSalvarInstrumento = { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r ->
                     navController.navigate(
                         "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r"
@@ -124,7 +125,8 @@ fun Navigator(activity: ComponentActivity) {
             ListaGuitarrasScreen(activity = activity,
                 aoNavegarParaDetalhesInstrumento = { id ->
                     navController.navigate("detalhesInstrumento/$id")
-                }
+                },
+                aoNavegarParaCustomizarInstrumento = {navController.navigate("customizarInstrumento")}
             )
         }
 

@@ -1,8 +1,14 @@
 package com.plg.ui.viewmodels
 
 import android.app.Application
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObjects
 import com.plg.database.AppDatabase
+import com.plg.model.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -10,6 +16,7 @@ import kotlinx.coroutines.flow.first
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val dao = AppDatabase.instancia(application).usuarioDao()
+    private val remoteDb = Firebase.firestore
 
     private val _textoUsuario = MutableStateFlow("")
     val textoUsuario: StateFlow<String> get() = _textoUsuario
@@ -31,13 +38,23 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         _mostrarSenha.value = !_mostrarSenha.value
     }
 
-    suspend fun obterIdUsuario(nome: String) : Long {
+    suspend fun obterIdUsuario(nome: String): Long {
         return dao.checarUsuarioExistente(nome).first()[0].id
     }
 
-    suspend fun autenticarLogin(nome: String, senha: String): Boolean {
-        val usuarios = dao.confirmarUsuario(nome, senha).first()
-        return usuarios.isNotEmpty()
+    fun autenticarLogin(nome: String, senha: String, context: Context, callback: (Boolean) -> Unit) {
+        remoteDb.collection("Usuarios").whereEqualTo("login", nome).whereEqualTo("senha", senha)
+            .get().addOnSuccessListener {
+                val usuarios: List<Usuario> = it.toObjects()
+                callback(usuarios.isNotEmpty())
+            }.addOnFailureListener {
+                Toast.makeText(
+                    context,
+                    "Não foi possível acessar o servidor.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                callback(false)
+            }
     }
 
 }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface UsuarioDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun salvarUsuario(usuario: Usuario)
+    suspend fun salvarUsuario(usuario: Usuario) : Long
 
     @Query("SELECT * FROM usuario WHERE id = :id")
     fun buscarUsuario(id: Long): Flow<Usuario>
