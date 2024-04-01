@@ -7,15 +7,13 @@ import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObjects
-import com.plg.database.AppDatabase
 import com.plg.model.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.tasks.await
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val dao = AppDatabase.instancia(application).usuarioDao()
     private val remoteDb = Firebase.firestore
 
     private val _textoUsuario = MutableStateFlow("")
@@ -38,11 +36,20 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         _mostrarSenha.value = !_mostrarSenha.value
     }
 
-    suspend fun obterIdUsuario(nome: String): Long {
-        return dao.checarUsuarioExistente(nome).first()[0].id
+    suspend fun obterIdUsuario(nome: String): String {
+        var id = ""
+        remoteDb.collection("Usuarios").document(nome).get().addOnSuccessListener {
+            id = it.id
+        }.await()
+        return id
     }
 
-    fun autenticarLogin(nome: String, senha: String, context: Context, callback: (Boolean) -> Unit) {
+    fun autenticarLogin(
+        nome: String,
+        senha: String,
+        context: Context,
+        callback: (Boolean) -> Unit
+    ) {
         remoteDb.collection("Usuarios").whereEqualTo("login", nome).whereEqualTo("senha", senha)
             .get().addOnSuccessListener {
                 val usuarios: List<Usuario> = it.toObjects()

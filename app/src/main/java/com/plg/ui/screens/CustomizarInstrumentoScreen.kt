@@ -1,6 +1,7 @@
 package com.plg.ui.screens
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.compose.foundation.gestures.rememberTransformableState
@@ -64,7 +65,7 @@ fun CustomizarInstrumentoScreen(
     aoNavegarParaListaGuitarras: function,
     aoNavegarParaSalvarInstrumento: (
         Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int,
-        Float, Float, Float, Float, Float, String, Long
+        Float, Float, Float, Float, Float, String, String
     ) -> Unit
 ) {
     val globalViewModel: GlobalViewModel by activity.viewModels()

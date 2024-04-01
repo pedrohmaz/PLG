@@ -1,21 +1,21 @@
 package com.plg.ui.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.plg.database.AppDatabase
+import com.google.firebase.firestore.toObject
 import com.plg.model.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class CriarUsuarioViewModel(application: Application) : AndroidViewModel(application) {
 
 
-    private val dao = AppDatabase.instancia(application).usuarioDao()
     private val remoteDb = Firebase.firestore
 
     private val _textoUsuario = MutableStateFlow("")
@@ -39,14 +39,21 @@ class CriarUsuarioViewModel(application: Application) : AndroidViewModel(applica
 
     fun salvarUsuario(usuario: Usuario) {
         viewModelScope.launch {
-            val id = dao.salvarUsuario(usuario)
-            remoteDb.collection("Usuarios").add(dao.buscarUsuario(id).first())
+
+            remoteDb.collection("Usuarios").document(usuario.login)
+                .set(usuario)
         }
     }
 
     suspend fun checarUsuarioNovo(nome: String): Boolean {
-        val usuarios = dao.checarUsuarioExistente(nome).first()
-        return usuarios.isEmpty()
+        var usuario: Usuario? = null
+        remoteDb.collection("Usuarios").document(nome).get().addOnSuccessListener {
+            Log.i("TAG", "checarUsuarioNovo: onSuccessListener Trigado")
+            usuario = it.toObject()
+            Log.i("TAG", "checarUsuarioNovo: $usuario")
+        }.await()
+        Log.i("TAG", "checarUsuarioNovo: $usuario")
+        return usuario == null
     }
 
     fun resetarEstado() {

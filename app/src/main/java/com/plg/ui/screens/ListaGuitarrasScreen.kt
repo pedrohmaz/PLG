@@ -75,8 +75,7 @@ fun ListaGuitarrasScreen(
         if (guitarraRemovida) {
             val guitarra = viewModel.buscarGuitarraPorId(guitarraId)
             if (guitarra != null) {
-                Log.i("TAG", "ListaGuitarrasScreen: $guitarra")
-                viewModel.removerGuitarra(guitarra)
+                viewModel.removerGuitarra(guitarra.id)
                 val resultado = snackBar.showSnackbar(
                     message = "Instrumento ${guitarra.nome} removido.",
                     actionLabel = "Desfazer",
@@ -161,10 +160,10 @@ fun ListaGuitarrasScreen(
                         }
                     }
                 }
-                FloatingActionButton(
-                    modifier = Modifier
-                        .align(BottomEnd)
-                        .padding(16.dp), onClick = { aoNavegarParaCustomizarInstrumento() }) {
+                FloatingActionButton(  modifier = Modifier
+                    .align(BottomEnd)
+                    .padding(16.dp),
+                    onClick = { aoNavegarParaCustomizarInstrumento() }) {
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = "Novo Instrumento"

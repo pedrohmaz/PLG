@@ -3,21 +3,25 @@ package com.plg.ui.viewmodels
 import android.app.Application
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import com.plg.R
-import com.plg.database.AppDatabase
 import com.plg.model.Guitarra
 import com.plg.ui.components.BotaoSelecionado
 import com.plg.ui.theme.CorCorpoVermelho
 import com.plg.ui.theme.CorEscalaEscura
 import com.plg.ui.theme.CorEscudoOriginal
 import com.plg.ui.theme.CorMarcacaoClara
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.tasks.await
 
 class EditarInstrumentoViewModel(application: Application) : AndroidViewModel(application) {
 
-
-    val guitarraDao = AppDatabase.instancia(application).guitarraDao()
+    private val remoteDb = Firebase.firestore
 
     private val _guitarra = MutableStateFlow<Guitarra?>(null)
     val guitarra: StateFlow<Guitarra?> get() = _guitarra
@@ -199,8 +203,16 @@ class EditarInstrumentoViewModel(application: Application) : AndroidViewModel(ap
         atualizarValorTotal()
     }
 
-    fun buscarValor(valor: StateFlow<Float>) : Float{
+    fun buscarValor(valor: StateFlow<Float>): Float {
         return valor.value
+    }
+
+    suspend fun definirGuitarra(id: Long) {
+        viewModelScope.async {
+            remoteDb.collection("Guitarras").whereEqualTo("id", id).get().addOnSuccessListener {
+                _guitarra.value = it.first().toObject()
+            }.await()
+        }.await()
     }
 
 }

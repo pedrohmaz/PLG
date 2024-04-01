@@ -1,5 +1,6 @@
 package com.plg.ui.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
@@ -27,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,6 +44,7 @@ import com.plg.ui.components.GuitarraImagem
 import com.plg.ui.theme.PLGTheme
 import com.plg.ui.viewmodels.GlobalViewModel
 import com.plg.ui.viewmodels.SalvarInstrumentoViewModel
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,18 +55,22 @@ fun SalvarInstrumentoScreen(
     aoNavegarParaListaGuitarras: function,
     a: Int, b: Int, c: Int, d: Int, e: Int,
     f: Int, g: Int, h: Int, i: Int, j: Int,
-    k: Int, l: Float, m: Float, n: Float, o: Float, p: Float, q: String, r: Long
+    k: Int, l: Float, m: Float, n: Float, o: Float, p: Float, q: String, r: String
 ) {
 
     val viewModel: SalvarInstrumentoViewModel by activity.viewModels()
     val globalViewModel: GlobalViewModel by activity.viewModels()
     val textoNome by viewModel.textoNome.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
-LaunchedEffect(Unit){
-    viewModel.mudarTexto(q)
-    if (q != "blank") viewModel.mudarTexto(q)
-    else viewModel.mudarTexto("")
-}
+    val atualizandoGuitarra by globalViewModel.atualizandoGuitarra.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.mudarTexto(q)
+        if (q != "blank") viewModel.mudarTexto(q)
+        else viewModel.mudarTexto("")
+        Log.i("Id do Usuario", "SalvarInstrumentoScreen: ${globalViewModel.usuarioId.value}")
+    }
     PLGTheme {
         Scaffold(
             topBar = {
@@ -137,15 +144,46 @@ LaunchedEffect(Unit){
                             Text(text = "Voltar")
                         }
                         Button(onClick = {
-                            var nome = textoNome
-                            if (nome.isBlank()) nome = "Minha Guitarra"
-                            val guitarra = Guitarra(
-                                a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, nome, r, globalViewModel.guitarraId.value
-                            )
-                            viewModel.salvarGuitarra(guitarra)
-                            Toast.makeText(activity, "Guitarra salva.", Toast.LENGTH_SHORT)
-                                .show()
-                            aoNavegarParaListaGuitarras()
+                            coroutineScope.launch {
+                                var nome = textoNome
+                                Log.i("Treta", "SalvarInstrumentoScreen: $atualizandoGuitarra")
+                                val id: Long =
+                                    if (atualizandoGuitarra) globalViewModel.guitarraId.value
+                                    else globalViewModel.definirId()
+                                if (nome.isBlank()) nome = "Minha Guitarra"
+                                val guitarra = Guitarra(
+                                    a,
+                                    b,
+                                    c,
+                                    d,
+                                    e,
+                                    f,
+                                    g,
+                                    h,
+                                    i,
+                                    j,
+                                    k,
+                                    l,
+                                    m,
+                                    n,
+                                    o,
+                                    p,
+                                    nome,
+                                    r,
+                                    id
+                                )
+                                if (!atualizandoGuitarra) {
+                                    Log.i("Treta", "SalvarInstrumentoScreen: salvando nova guitarra")
+                                    viewModel.salvarGuitarra(guitarra)
+                                    Toast.makeText(activity, "Guitarra salva.", Toast.LENGTH_SHORT)
+                                        .show()
+                                } else {
+                                    Log.i("Treta", "SalvarInstrumentoScreen: atualizando guitarra")
+                                    viewModel.atualizarGuitarra(guitarra)
+                                    globalViewModel.definirAtualizandoGuitarra(false)
+                                }
+                                aoNavegarParaListaGuitarras()
+                            }
                         }) {
                             Text(text = "Salvar")
                         }

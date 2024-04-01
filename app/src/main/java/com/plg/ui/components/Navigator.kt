@@ -71,7 +71,7 @@ fun Navigator(activity: ComponentActivity) {
                 navArgument("o") { type = NavType.FloatType },
                 navArgument("p") { type = NavType.FloatType },
                 navArgument("q") { type = NavType.StringType },
-                navArgument("r") { type = NavType.LongType }
+                navArgument("r") { type = NavType.StringType }
             )
         ) { backStackEntry ->
             val a = backStackEntry.arguments?.getInt("a") ?: 0
@@ -91,7 +91,7 @@ fun Navigator(activity: ComponentActivity) {
             val o = backStackEntry.arguments?.getFloat("o") ?: 0f
             val p = backStackEntry.arguments?.getFloat("p") ?: 0f
             val q = backStackEntry.arguments?.getString("q") ?: ""
-            val r = backStackEntry.arguments?.getLong("r") ?: 0
+            val r = backStackEntry.arguments?.getString("r") ?: "0"
 
             SalvarInstrumentoScreen(
                 activity = activity,

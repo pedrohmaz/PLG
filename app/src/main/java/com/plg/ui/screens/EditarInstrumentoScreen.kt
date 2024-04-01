@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.plg.formatarParaReal
 import com.plg.function
-import com.plg.model.Guitarra
 import com.plg.ui.components.BotaoSelecionado
 import com.plg.ui.components.GuitarraImagem
 import com.plg.ui.components.MenuCoresBraco
@@ -61,44 +60,42 @@ import com.plg.ui.viewmodels.GlobalViewModel
 @Composable
 fun EditarInstrumentoScreen(
     activity: ComponentActivity,
-    aoNavegarParaSalvarInstrumento: (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Float, Float, Float, Float, Float, String, Long) -> Unit
+    aoNavegarParaSalvarInstrumento: (Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Int, Float, Float, Float, Float, Float, String, String) -> Unit
 ) {
     val globalViewModel: GlobalViewModel by activity.viewModels()
     val viewModel: EditarInstrumentoViewModel by activity.viewModels()
     val usuarioId = globalViewModel.usuarioId.collectAsState()
-    val guitarraId = globalViewModel.guitarraId.collectAsState()
+    val guitarraId by globalViewModel.guitarraId.collectAsState()
     val parteSelecionada = remember { viewModel.trocarParteSelecionada() }
     val menuCores: MutableState<@Composable function> =
         remember { mutableStateOf(@Composable { MenuCoresCorpo(parteSelecionada) }) }
     val botaoSelecionado = viewModel.botaoSelecionado.collectAsState()
-    var guitarra by remember {
-        mutableStateOf<Guitarra?>(null)
-    }
+    val guitarra by viewModel.guitarra.collectAsState()
 
-LaunchedEffect(Unit){
-    guitarra = viewModel.guitarraDao.buscarGuitarraPorId(guitarraId.value)
-    Log.i("TAG", "EditarInstrumentoScreen: ")
-            guitarra?.let {guitarra ->
-                viewModel.definirDesenhoInicial(
-                    guitarra.corpo,
-                    guitarra.braco,
-                    guitarra.headstock,
-                    guitarra.escudo,
-                    guitarra.marcacoes,
-                    guitarra.pecas,
-                    guitarra.corCorpo,
-                    guitarra.corBraco,
-                    guitarra.corHeadstock,
-                    guitarra.corEscudo,
-                    guitarra.corMarcacoes,
-                    guitarra.valor,
-                    guitarra.valorModelo,
-                    guitarra.valorEscala,
-                    guitarra.valorHeadstock,
-                    guitarra.valorEscudo
+    LaunchedEffect(Unit) {
+        viewModel.definirGuitarra(guitarraId)
+        Log.i("TAG", "EditarInstrumentoScreen: ")
+        guitarra?.let { guitarra ->
+            viewModel.definirDesenhoInicial(
+                guitarra.corpo,
+                guitarra.braco,
+                guitarra.headstock,
+                guitarra.escudo,
+                guitarra.marcacoes,
+                guitarra.pecas,
+                guitarra.corCorpo,
+                guitarra.corBraco,
+                guitarra.corHeadstock,
+                guitarra.corEscudo,
+                guitarra.corMarcacoes,
+                guitarra.valor,
+                guitarra.valorModelo,
+                guitarra.valorEscala,
+                guitarra.valorHeadstock,
+                guitarra.valorEscudo
 
-                )
-            }
+            )
+        }
     }
 
 
@@ -202,7 +199,8 @@ LaunchedEffect(Unit){
                         .align(Alignment.TopEnd)
                         .padding(16.dp),
                     onClick = {
-
+                        globalViewModel.definirAtualizandoGuitarra(true)
+                        Log.i("Treta", "EditarInstrumentoScreen: ${globalViewModel.atualizandoGuitarra.value}")
                         aoNavegarParaSalvarInstrumento(
                             corpo.value,
                             braco.value,

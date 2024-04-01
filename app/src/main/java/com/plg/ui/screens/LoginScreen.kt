@@ -1,6 +1,7 @@
 package com.plg.ui.screens
 
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
@@ -162,7 +163,7 @@ fun LoginScreen(
                                         coroutineScope.launch {
                                             if (sucesso) {
                                                 globalViewModel.mudarUsuarioId(
-                                                    viewModel.obterIdUsuario(textoUsuario.value)
+                                                    textoUsuario.value
                                                 )
                                                 aoNavegarParaCustomizarInstrumento()
                                             } else {

@@ -1,27 +1,26 @@
 package com.plg.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity
 data class Guitarra(
-    val corpo: Int,
-    val braco: Int,
-    val headstock: Int,
-    val escudo: Int,
-    val marcacoes: Int,
-    val pecas: Int,
-    val corCorpo: Int,
-    val corBraco: Int,
-    val corHeadstock: Int,
-    val corEscudo: Int,
-    val corMarcacoes: Int,
+    val corpo: Int = 0,
+    val braco: Int = 0,
+    val headstock: Int = 0,
+    val escudo: Int = 0,
+    val marcacoes: Int = 0,
+    val pecas: Int = 0,
+    val corCorpo: Int = 0,
+    val corBraco: Int = 0,
+    val corHeadstock: Int = 0,
+    val corEscudo: Int = 0,
+    val corMarcacoes: Int = 0,
     val valor: Float = 0f,
     val valorModelo: Float = 0f,
     val valorEscala: Float = 0f,
     val valorHeadstock: Float = 0f,
     val valorEscudo: Float = 0f,
     val nome: String = "",
-    val usuario: Long = 0,
-    @PrimaryKey(autoGenerate = true) val id: Long = 0
+    val usuario: String = "",
+    val id: Long = 0,
+
 )
+
