@@ -12,6 +12,7 @@ import com.plg.ui.screens.CustomizarInstrumentoScreen
 import com.plg.ui.screens.DetalhesInstrumentoScreen
 import com.plg.ui.screens.EditarInstrumentoScreen
 import com.plg.ui.screens.ListaGuitarrasScreen
+import com.plg.ui.screens.ListaUsuariosScreen
 import com.plg.ui.screens.LoginScreen
 import com.plg.ui.screens.SalvarInstrumentoScreen
 
@@ -32,6 +33,9 @@ fun Navigator(activity: ComponentActivity) {
                 aoNavegarParaCriarUsuario =
                 {
                     navController.navigate("criarUsuario")
+                },
+                aoNavegarParaListaUsuarios = {
+                    navController.navigate("listaUsuarios")
                 }
             )
         }
@@ -153,6 +157,12 @@ fun Navigator(activity: ComponentActivity) {
                     )
                 })
         }
+
+        composable("listaUsuarios"){
+            ListaUsuariosScreen(activity = activity,
+                aoNavegarParaListaGuitarras = {navController.navigate("listaGuitarras")})
+        }
+
     }
 }
 

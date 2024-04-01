@@ -56,6 +56,7 @@ fun DetalhesInstrumentoScreen(
 
     val guitarra by viewModel.guitarra.collectAsState()
     var dialogAberto by remember { mutableStateOf(false) }
+    val admin = globalViewModel.admin.collectAsState()
 
 
     LaunchedEffect(Unit) {
@@ -80,12 +81,14 @@ fun DetalhesInstrumentoScreen(
                     TopAppBarDefaults.smallTopAppBarColors(MaterialTheme.colorScheme.primary),
                     actions = {
                         Row {
-                            IconButton(onClick = { aoNavegarParaEditarInstrumento() }) {
-                                Icon(
-                                    imageVector = Icons.Sharp.Edit,
-                                    tint = White,
-                                    contentDescription = "editar"
-                                )
+                            if (!admin.value) {
+                                IconButton(onClick = { aoNavegarParaEditarInstrumento() }) {
+                                    Icon(
+                                        imageVector = Icons.Sharp.Edit,
+                                        tint = White,
+                                        contentDescription = "editar"
+                                    )
+                                }
                             }
                             IconButton(onClick = {
                                 dialogAberto = true

@@ -25,6 +25,9 @@ class GlobalViewModel : ViewModel() {
     private val _guitarraId = MutableStateFlow<Long>(0)
     val guitarraId: StateFlow<Long> get() = _guitarraId
 
+    private val _admin = MutableStateFlow(false)
+    val admin: StateFlow<Boolean> get() = _admin
+
     suspend fun definirId(): Long {
         var id: Long = 0
         viewModelScope.async {
@@ -58,6 +61,10 @@ class GlobalViewModel : ViewModel() {
 
     fun definirAtualizandoGuitarra(estado: Boolean){
         _atualizandoGuitarra.value = estado
+    }
+
+    fun mudarAdmin(estado: Boolean){
+        _admin.value = estado
     }
 
 }

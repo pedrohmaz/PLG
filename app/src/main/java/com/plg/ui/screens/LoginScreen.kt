@@ -63,6 +63,7 @@ fun LoginScreen(
     activity: ComponentActivity,
     aoNavegarParaCustomizarInstrumento: function,
     aoNavegarParaCriarUsuario: function,
+    aoNavegarParaListaUsuarios: function
 ) {
 
     val globalViewModel: GlobalViewModel by activity.viewModels()
@@ -162,16 +163,22 @@ fun LoginScreen(
                                     ) { sucesso ->
                                         coroutineScope.launch {
                                             if (sucesso) {
+                                                globalViewModel.mudarAdmin(false)
                                                 globalViewModel.mudarUsuarioId(
                                                     textoUsuario.value
                                                 )
                                                 aoNavegarParaCustomizarInstrumento()
                                             } else {
-                                                Toast.makeText(
-                                                    activity,
-                                                    "Usuário ou senha incorretos.",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                if (textoUsuario.value == "PLGadmin" && textoSenha.value == "luthier123") {
+                                                    globalViewModel.mudarAdmin(true)
+                                                    aoNavegarParaListaUsuarios()
+                                                }else {
+                                                    Toast.makeText(
+                                                        activity,
+                                                        "Usuário ou senha incorretos.",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
                                             }
                                         }
                                     }
