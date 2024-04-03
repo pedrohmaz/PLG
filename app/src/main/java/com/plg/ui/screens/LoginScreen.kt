@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.plg.R
+import com.plg.estaConectado
 import com.plg.function
 import com.plg.ui.theme.PLGTheme
 import com.plg.ui.viewmodels.GlobalViewModel

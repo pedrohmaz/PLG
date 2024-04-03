@@ -8,6 +8,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.plg.model.Usuario
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -47,10 +48,12 @@ class CriarUsuarioViewModel(application: Application) : AndroidViewModel(applica
 
     suspend fun checarUsuarioNovo(nome: String): Boolean {
         var usuario: Usuario? = null
-        remoteDb.collection("Usuarios").document(nome).get().addOnSuccessListener {
-            Log.i("TAG", "checarUsuarioNovo: onSuccessListener Trigado")
-            usuario = it.toObject()
-            Log.i("TAG", "checarUsuarioNovo: $usuario")
+        viewModelScope.async {
+            remoteDb.collection("Usuarios").document(nome).get().addOnSuccessListener {
+                Log.i("TAG", "checarUsuarioNovo: onSuccessListener Trigado")
+                usuario = it.toObject()
+                Log.i("TAG", "checarUsuarioNovo: $usuario")
+            }.await()
         }.await()
         Log.i("TAG", "checarUsuarioNovo: $usuario")
         return usuario == null

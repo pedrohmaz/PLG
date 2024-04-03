@@ -17,6 +17,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -31,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.plg.estaConectado
 import com.plg.function
 import com.plg.ui.theme.PLGTheme
 import com.plg.ui.viewmodels.GlobalViewModel
@@ -44,12 +48,24 @@ fun ListaUsuariosScreen(activity: ComponentActivity, aoNavegarParaListaGuitarras
     val globalViewModel: GlobalViewModel by activity.viewModels()
     val listaUsuarios by viewModel.listaUsuarios.collectAsState()
 
+    val snackBar = remember { SnackbarHostState() }
+
     LaunchedEffect(Unit){
        viewModel.atualizarLista()
+        if(!estaConectado(activity)){
+            snackBar.showSnackbar(
+                message = "As informações podem estar desatualizadas devido à falta de conecção.",
+                duration = SnackbarDuration.Long
+            )
+        }
     }
 
     PLGTheme {
-        Scaffold( topBar = {
+        Scaffold(   snackbarHost = {
+            SnackbarHost(
+                hostState = snackBar,
+            )
+        }, topBar = {
             TopAppBar(title = { Text(text = "Admin")},
                 colors = TopAppBarDefaults.mediumTopAppBarColors(MaterialTheme.colorScheme.primary)
         )
@@ -71,11 +87,13 @@ fun ListaUsuariosScreen(activity: ComponentActivity, aoNavegarParaListaGuitarras
                             .clickable {
                                 globalViewModel.mudarUsuarioId(it.login)
                                 aoNavegarParaListaGuitarras()
-                                       },
+                            },
                         elevation = CardDefaults.cardElevation(8.dp)
                     ){
                         Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically){
-                            Text(modifier = Modifier.width(200.dp).padding(horizontal = 16.dp), text = it.login, fontSize = 20.sp)
+                            Text(modifier = Modifier
+                                .width(200.dp)
+                                .padding(horizontal = 16.dp), text = it.login, fontSize = 20.sp)
                             Text(modifier = Modifier.padding(horizontal = 8.dp), text = "($numero Instrumentos)", fontSize = 20.sp)
                         }
                     }

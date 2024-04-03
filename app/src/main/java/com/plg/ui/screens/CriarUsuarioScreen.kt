@@ -43,6 +43,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.plg.estaConectado
 import com.plg.model.Usuario
 import com.plg.ui.theme.PLGTheme
 import com.plg.ui.viewmodels.CriarUsuarioViewModel
@@ -122,36 +123,38 @@ fun CriarUsuarioScreen(activity: ComponentActivity, navController: NavHostContro
                             modifier = Modifier.align(CenterHorizontally),
                             onClick = {
                                 coroutineScope.launch {
-                                    if (viewModel.checarUsuarioNovo(textoUsuario.value)) {
-                                        viewModel.mostrarTextoAux("")
-                                        if (viewModel.senhaValida()) {
-                                            viewModel.salvarUsuario(
-                                                Usuario(
-                                                    login = textoUsuario.value,
-                                                    senha = textoSenha.value
+                                    if(estaConectado(activity)) {
+                                        if (viewModel.checarUsuarioNovo(textoUsuario.value)) {
+                                            viewModel.mostrarTextoAux("")
+                                            if (viewModel.senhaValida()) {
+                                                viewModel.salvarUsuario(
+                                                    Usuario(
+                                                        login = textoUsuario.value,
+                                                        senha = textoSenha.value
+                                                    )
                                                 )
-                                            )
-                                            keyboardController?.hide()
-                                            navController.popBackStack()
-                                            viewModel.resetarEstado()
-                                            Toast.makeText(
-                                                activity,
-                                                "Usuário criado com sucesso",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                                keyboardController?.hide()
+                                                navController.popBackStack()
+                                                viewModel.resetarEstado()
+                                                Toast.makeText(
+                                                    activity,
+                                                    "Usuário criado com sucesso",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            } else {
+                                                keyboardController?.hide()
+                                                asteriscoSenha = "*"
+                                                corSenhaSupporting = Red
+                                            }
                                         } else {
                                             keyboardController?.hide()
-                                            asteriscoSenha = "*"
-                                            corSenhaSupporting = Red
+                                            viewModel.mostrarTextoAux(
+                                                "Nome de usúario já" +
+                                                        " cadastrado. Por favor escolha um novo nome."
+                                            )
+                                            asteriscoNome = "*"
                                         }
-                                    } else {
-                                        keyboardController?.hide()
-                                        viewModel.mostrarTextoAux(
-                                            "Nome de usúario já" +
-                                                    " cadastrado. Por favor escolha um novo nome."
-                                        )
-                                        asteriscoNome = "*"
-                                    }
+                                    } else Toast.makeText(activity, "Não foi possível criar usuário. Internet indisponível.", Toast.LENGTH_SHORT).show()
                                 }
                             }) {
                             Text("Criar Usuário")
