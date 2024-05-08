@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObjects
-import com.plg.model.Usuario
+import com.plg.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
@@ -16,44 +16,44 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val remoteDb = Firebase.firestore
 
-    private val _textoUsuario = MutableStateFlow("")
-    val textoUsuario: StateFlow<String> get() = _textoUsuario
-    private val _textoSenha = MutableStateFlow("")
-    val textoSenha: StateFlow<String> get() = _textoSenha
-    private val _mostrarSenha = MutableStateFlow(false)
-    val mostrarSenha: StateFlow<Boolean> get() = _mostrarSenha
+    private val _userText = MutableStateFlow("")
+    val userText: StateFlow<String> get() = _userText
+    private val _passwordText = MutableStateFlow("")
+    val passwordText: StateFlow<String> get() = _passwordText
+    private val _showPassword = MutableStateFlow(false)
+    val showPassword: StateFlow<Boolean> get() = _showPassword
 
 
-    fun digitarUsuario(texto: String) {
-        _textoUsuario.value = texto
+    fun typeUser(text: String) {
+        _userText.value = text
     }
 
-    fun digitarSenha(texto: String) {
-        _textoSenha.value = texto
+    fun typePassword(text: String) {
+        _passwordText.value = text
     }
 
-    fun clicarMostrarSenha() {
-        _mostrarSenha.value = !_mostrarSenha.value
+    fun clickShowPassword() {
+        _showPassword.value = !_showPassword.value
     }
 
-    suspend fun obterIdUsuario(nome: String): String {
+    suspend fun getUserId(name: String): String {
         var id = ""
-        remoteDb.collection("Usuarios").document(nome).get().addOnSuccessListener {
+        remoteDb.collection("Usuarios").document(name).get().addOnSuccessListener {
             id = it.id
         }.await()
         return id
     }
 
-    fun autenticarLogin(
-        nome: String,
-        senha: String,
+    fun autenticateLogin(
+        name: String,
+        password: String,
         context: Context,
         callback: (Boolean) -> Unit
     ) {
-        remoteDb.collection("Usuarios").whereEqualTo("login", nome).whereEqualTo("senha", senha)
+        remoteDb.collection("Usuarios").whereEqualTo("login", name).whereEqualTo("senha", password)
             .get().addOnSuccessListener {
-                val usuarios: List<Usuario> = it.toObjects()
-                callback(usuarios.isNotEmpty())
+                val users: List<User> = it.toObjects()
+                callback(users.isNotEmpty())
             }.addOnFailureListener {
                 Toast.makeText(
                     context,

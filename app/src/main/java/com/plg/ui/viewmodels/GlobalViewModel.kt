@@ -1,6 +1,5 @@
 package com.plg.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
@@ -14,21 +13,21 @@ class GlobalViewModel : ViewModel() {
 
     private val remoteDb = Firebase.firestore
 
-    private val _usuarioId = MutableStateFlow("")
-    val usuarioId: StateFlow<String> get() = _usuarioId
-    private val _guitarraRemovida = MutableStateFlow(false)
-    val guitarraRemovida: StateFlow<Boolean> get() = _guitarraRemovida
+    private val _userId = MutableStateFlow("")
+    val userId: StateFlow<String> get() = _userId
+    private val _removedGuitar = MutableStateFlow(false)
+    val removedGuitar: StateFlow<Boolean> get() = _removedGuitar
 
-    private val _atualizandoGuitarra = MutableStateFlow(false)
-    val atualizandoGuitarra: StateFlow<Boolean> get() = _atualizandoGuitarra
+    private val _updatingGuitar = MutableStateFlow(false)
+    val updatingGuitar: StateFlow<Boolean> get() = _updatingGuitar
 
-    private val _guitarraId = MutableStateFlow<Long>(0)
-    val guitarraId: StateFlow<Long> get() = _guitarraId
+    private val _guitarId = MutableStateFlow<Long>(0)
+    val guitarId: StateFlow<Long> get() = _guitarId
 
     private val _admin = MutableStateFlow(false)
     val admin: StateFlow<Boolean> get() = _admin
 
-    suspend fun definirId(): Long {
+    suspend fun setId(): Long {
         var id: Long = 0
         viewModelScope.async {
             remoteDb.collection("Id").document("id").get().addOnSuccessListener {
@@ -43,28 +42,27 @@ class GlobalViewModel : ViewModel() {
                 }
             }.await()
         }.await()
-        Log.i("Treta", "definirId: id = $id")
         return id
     }
 
-    fun mudarUsuarioId(id: String) {
-        _usuarioId.value = id
+    fun changeUserId(id: String) {
+        _userId.value = id
     }
 
-    fun mudarGuitarraId(id: Long) {
-        _guitarraId.value = id
+    fun changeGuitarId(id: Long) {
+        _guitarId.value = id
     }
 
-    fun definirSeGuitarraFoiRemovida(estado: Boolean) {
-        _guitarraRemovida.value = estado
+    fun setIfGuitarWasRemoved(state: Boolean) {
+        _removedGuitar.value = state
     }
 
-    fun definirAtualizandoGuitarra(estado: Boolean){
-        _atualizandoGuitarra.value = estado
+    fun setUpdatingGuitar(state: Boolean){
+        _updatingGuitar.value = state
     }
 
-    fun mudarAdmin(estado: Boolean){
-        _admin.value = estado
+    fun changeAdmin(state: Boolean){
+        _admin.value = state
     }
 
 }

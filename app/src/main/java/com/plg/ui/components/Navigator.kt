@@ -7,14 +7,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.plg.ui.screens.CriarUsuarioScreen
-import com.plg.ui.screens.CustomizarInstrumentoScreen
-import com.plg.ui.screens.DetalhesInstrumentoScreen
-import com.plg.ui.screens.EditarInstrumentoScreen
-import com.plg.ui.screens.ListaGuitarrasScreen
-import com.plg.ui.screens.ListaUsuariosScreen
+import com.plg.ui.screens.CreateUserScreen
+import com.plg.ui.screens.CustomizeInstrumentScreen
+import com.plg.ui.screens.InstrumentDetailsScreen
+import com.plg.ui.screens.EditInstrumentScreen
+import com.plg.ui.screens.GuitarListScreen
+import com.plg.ui.screens.UserListScreen
 import com.plg.ui.screens.LoginScreen
-import com.plg.ui.screens.SalvarInstrumentoScreen
+import com.plg.ui.screens.SaveInstrumentScreen
 
 @Composable
 fun Navigator(activity: ComponentActivity) {
@@ -26,37 +26,37 @@ fun Navigator(activity: ComponentActivity) {
     {
         composable("login") {
             LoginScreen(activity = activity,
-                aoNavegarParaCustomizarInstrumento =
+                onNavigateToCustomizeInstrument =
                 {
                     navController.navigate("customizarInstrumento")
                 },
-                aoNavegarParaCriarUsuario =
+                onNavigateToCreateUser =
                 {
                     navController.navigate("criarUsuario")
                 },
-                aoNavegarParaListaUsuarios = {
+                onNavigateToUserList = {
                     navController.navigate("listaUsuarios")
                 }
             )
         }
         composable("criarUsuario") {
-            CriarUsuarioScreen(
+            CreateUserScreen(
                 activity = activity,
                 navController = navController
             )
         }
         composable("customizarInstrumento") {
-            CustomizarInstrumentoScreen(
+            CustomizeInstrumentScreen(
                 activity,
-                aoNavegarParaListaGuitarras = { navController.navigate("listaGuitarras") },
-                aoNavegarParaSalvarInstrumento = { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r ->
+                onNavigateToGuitar = { navController.navigate("listaGuitarras") },
+                onNavigateToSaveInstrument = { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s ->
                     navController.navigate(
-                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r"
+                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r/$s"
                     )
                 })
         }
         composable(
-            "salvarInstrumento/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}/{j}/{k}/{l}/{m}/{n}/{o}/{p}/{q}/{r}",
+            "salvarInstrumento/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}/{j}/{k}/{l}/{m}/{n}/{o}/{p}/{q}/{r}/{s}",
             arguments = listOf(
                 navArgument("a") { type = NavType.IntType },
                 navArgument("b") { type = NavType.IntType },
@@ -69,13 +69,14 @@ fun Navigator(activity: ComponentActivity) {
                 navArgument("i") { type = NavType.IntType },
                 navArgument("j") { type = NavType.IntType },
                 navArgument("k") { type = NavType.IntType },
-                navArgument("l") { type = NavType.FloatType },
+                navArgument("l") { type = NavType.IntType },
                 navArgument("m") { type = NavType.FloatType },
                 navArgument("n") { type = NavType.FloatType },
                 navArgument("o") { type = NavType.FloatType },
                 navArgument("p") { type = NavType.FloatType },
-                navArgument("q") { type = NavType.StringType },
-                navArgument("r") { type = NavType.StringType }
+                navArgument("q") { type = NavType.FloatType },
+                navArgument("r") { type = NavType.StringType },
+                navArgument("s") { type = NavType.StringType }
             )
         ) { backStackEntry ->
             val a = backStackEntry.arguments?.getInt("a") ?: 0
@@ -89,18 +90,19 @@ fun Navigator(activity: ComponentActivity) {
             val i = backStackEntry.arguments?.getInt("i") ?: 0
             val j = backStackEntry.arguments?.getInt("j") ?: 0
             val k = backStackEntry.arguments?.getInt("k") ?: 0
-            val l = backStackEntry.arguments?.getFloat("l") ?: 0f
+            val l = backStackEntry.arguments?.getInt("l") ?: 0
             val m = backStackEntry.arguments?.getFloat("m") ?: 0f
             val n = backStackEntry.arguments?.getFloat("n") ?: 0f
             val o = backStackEntry.arguments?.getFloat("o") ?: 0f
             val p = backStackEntry.arguments?.getFloat("p") ?: 0f
-            val q = backStackEntry.arguments?.getString("q") ?: ""
-            val r = backStackEntry.arguments?.getString("r") ?: "0"
+            val q = backStackEntry.arguments?.getFloat("q") ?: 0f
+            val r = backStackEntry.arguments?.getString("r") ?: ""
+            val s = backStackEntry.arguments?.getString("s") ?: "0"
 
-            SalvarInstrumentoScreen(
+            SaveInstrumentScreen(
                 activity = activity,
                 navController = navController,
-                aoNavegarParaListaGuitarras = {
+                onNavigateToGuitarList = {
                     navController.popBackStack()
                     navController.navigate("listaGuitarras")
                 },
@@ -121,16 +123,17 @@ fun Navigator(activity: ComponentActivity) {
                 o = o,
                 p = p,
                 q = q,
-                r = r
+                r = r,
+                s = s
             )
         }
 
         composable("listaGuitarras") {
-            ListaGuitarrasScreen(activity = activity,
-                aoNavegarParaDetalhesInstrumento = { id ->
+            GuitarListScreen(activity = activity,
+                onNavigateToInstrumentDetails = { id ->
                     navController.navigate("detalhesInstrumento/$id")
                 },
-                aoNavegarParaCustomizarInstrumento = {navController.navigate("customizarInstrumento")}
+                onNavigateToCustomizeInstrument = {navController.navigate("customizarInstrumento")}
             )
         }
 
@@ -139,28 +142,28 @@ fun Navigator(activity: ComponentActivity) {
             arguments = listOf(navArgument("id") { type = NavType.LongType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getLong("id") ?: 0
-            DetalhesInstrumentoScreen(
+            InstrumentDetailsScreen(
                 activity,
                 navController,
-                guitarraId = id,
-                aoNavegarParaEditarInstrumento = {
+                guitarId = id,
+                onNavigateToEditInstrument = {
                     navController.navigate("editarInstrumento")
                 })
         }
 
         composable("editarInstrumento") {
-            EditarInstrumentoScreen(
+            EditInstrumentScreen(
                 activity = activity,
-                aoNavegarParaSalvarInstrumento = { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r ->
+                onNavigateToSaveInstrument = { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s ->
                     navController.navigate(
-                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r"
+                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r/$s"
                     )
                 })
         }
 
         composable("listaUsuarios"){
-            ListaUsuariosScreen(activity = activity,
-                aoNavegarParaListaGuitarras = {navController.navigate("listaGuitarras")})
+            UserListScreen(activity = activity,
+                onNavigateToGuitarList = {navController.navigate("listaGuitarras")})
         }
 
     }

@@ -1,7 +1,6 @@
 package com.plg.ui.screens
 
 
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
@@ -34,8 +33,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,9 +45,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.plg.R
-import com.plg.estaConectado
 import com.plg.function
 import com.plg.ui.theme.PLGTheme
 import com.plg.ui.viewmodels.GlobalViewModel
@@ -62,9 +57,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     activity: ComponentActivity,
-    aoNavegarParaCustomizarInstrumento: function,
-    aoNavegarParaCriarUsuario: function,
-    aoNavegarParaListaUsuarios: function
+    onNavigateToCustomizeInstrument: function,
+    onNavigateToCreateUser: function,
+    onNavigateToUserList: function
 ) {
 
     val globalViewModel: GlobalViewModel by activity.viewModels()
@@ -72,9 +67,9 @@ fun LoginScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val textoUsuario = viewModel.textoUsuario.collectAsState()
-    val textoSenha = viewModel.textoSenha.collectAsState()
-    val mostrarSenha = viewModel.mostrarSenha.collectAsState()
+    val userText = viewModel.userText.collectAsState()
+    val passwordText = viewModel.passwordText.collectAsState()
+    val showPassword = viewModel.showPassword.collectAsState()
 
 
     PLGTheme {
@@ -107,12 +102,12 @@ fun LoginScreen(
                             contentDescription = ""
                         )
                         TextField(
-                            value = textoUsuario.value,
+                            value = userText.value,
 
                             onValueChange = {
-                                viewModel.digitarUsuario(it)
+                                viewModel.typeUser(it)
                             },
-                            label = { Text("Usuário") },
+                            label = { Text("User") },
                             singleLine = true,
                             leadingIcon = {
                                 Icon(
@@ -124,14 +119,14 @@ fun LoginScreen(
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                         )
                         TextField(
-                            value = textoSenha.value,
+                            value = passwordText.value,
 
                             onValueChange = {
-                                viewModel.digitarSenha(it)
+                                viewModel.typePassword(it)
                             },
-                            label = { Text("Senha") },
+                            label = { Text("Password") },
                             singleLine = true,
-                            visualTransformation = if (mostrarSenha.value) VisualTransformation.None
+                            visualTransformation = if (showPassword.value) VisualTransformation.None
                             else PasswordVisualTransformation(),
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Password,
@@ -146,10 +141,10 @@ fun LoginScreen(
                             }
                         )
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("Mostrar senha", fontSize = 15.sp)
+                            Text("Show password", fontSize = 15.sp)
                             Checkbox(
-                                checked = mostrarSenha.value,
-                                onCheckedChange = { viewModel.clicarMostrarSenha() },
+                                checked = showPassword.value,
+                                onCheckedChange = { viewModel.clickShowPassword() },
                             )
                         }
                         Button(modifier = Modifier
@@ -157,26 +152,26 @@ fun LoginScreen(
                             .padding(16.dp),
                             onClick = {
                                 coroutineScope.launch {
-                                    viewModel.autenticarLogin(
-                                        textoUsuario.value,
-                                        textoSenha.value,
+                                    viewModel.autenticateLogin(
+                                        userText.value,
+                                        passwordText.value,
                                         context = activity
                                     ) { sucesso ->
                                         coroutineScope.launch {
                                             if (sucesso) {
-                                                globalViewModel.mudarAdmin(false)
-                                                globalViewModel.mudarUsuarioId(
-                                                    textoUsuario.value
+                                                globalViewModel.changeAdmin(false)
+                                                globalViewModel.changeUserId(
+                                                    userText.value
                                                 )
-                                                aoNavegarParaCustomizarInstrumento()
+                                                onNavigateToCustomizeInstrument()
                                             } else {
-                                                if (textoUsuario.value == "PLGadmin" && textoSenha.value == "luthier123") {
-                                                    globalViewModel.mudarAdmin(true)
-                                                    aoNavegarParaListaUsuarios()
+                                                if (userText.value == "PLGadmin" && passwordText.value == "luthier123") {
+                                                    globalViewModel.changeAdmin(true)
+                                                    onNavigateToUserList()
                                                 }else {
                                                     Toast.makeText(
                                                         activity,
-                                                        "Usuário ou senha incorretos.",
+                                                        "Wrong user or password.",
                                                         Toast.LENGTH_SHORT
                                                     ).show()
                                                 }
@@ -186,7 +181,7 @@ fun LoginScreen(
                                 }
                             })
                         {
-                            Text("Entrar")
+                            Text("Enter")
                         }
                     }
                     FloatingActionButton(
@@ -195,14 +190,14 @@ fun LoginScreen(
                             .width(190.dp)
                             .align(Alignment.BottomEnd)
                             .padding(16.dp),
-                        onClick = { aoNavegarParaCriarUsuario() }
+                        onClick = { onNavigateToCreateUser() }
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Sharp.Add,
-                                contentDescription = "icone de adicionar"
+                                contentDescription = "add icon"
                             )
-                            Text(" Adicionar Usuário")
+                            Text("Create User")
                         }
                     }
                 }
