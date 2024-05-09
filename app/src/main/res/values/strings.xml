@@ -1,3 +1,36 @@
 <resources>
+
     <string name="app_name">PLG</string>
+    <string name="create_user">Create User</string>
+    <string name="user_name">User Name</string>
+    <string name="password">Password</string>
+    <string name="the_password_must_have">The password must have between 6 and 12 characters, at least one number and one uppercase letter.</string>
+    <string name="could_not_create_user_internet_unavailable">Could not create user. Internet unavailable.</string>
+    <string name="user_created_successfully">User created successfully</string>
+    <string name="username_already_exists_please_choose_another_one">Username already exists. Please choose another one.</string>
+    <string name="instrument_removed">Instrument \'%1$s\' removed.</string>
+    <string name="undo">Undo</string>
+    <string name="value">Value: %1$s</string>
+    <string name="new_instrument">New Instrument</string>
+    <string name="remove_instrument">Remove Instrument</string>
+    <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove %1$s?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="login">Login</string>
+    <string name="user">User</string>
+    <string name="show_password">Show password</string>
+    <string name="wrong_user_or_password">Wrong user or password.</string>
+    <string name="enter">Enter</string>
+    <string name="save_instrument">Save Instrument</string>
+    <string name="give_this_instrument_a_name">Give this instrument a name:</string>
+    <string name="final_value">Final value: %1$s</string>
+    <string name="back">Back</string>
+    <string name="my_guitar">My Guitar</string>
+    <string name="guitar_saved">Guitar saved.</string>
+    <string name="save">Save</string>
+    <string name="data_may_not_be_up_to_date">Data may not be up-to-date due to lack of connection</string>
+    <string name="admin">Admin</string>
+    <string name="instruments">(%1$s Instruments)</string>
+    <string name="could_not_access_server">Could not access server.</string>
+
 </resources>

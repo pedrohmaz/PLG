@@ -32,8 +32,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.plg.R
 import com.plg.isConnected
 import com.plg.function
 import com.plg.ui.theme.PLGTheme
@@ -54,7 +56,7 @@ fun UserListScreen(activity: ComponentActivity, onNavigateToGuitarList: function
        viewModel.updateList()
         if(!isConnected(activity)){
             snackBar.showSnackbar(
-                message = "Data may not be up-to-date due to lack of connection",
+                message = activity.getString(R.string.data_may_not_be_up_to_date),
                 duration = SnackbarDuration.Long
             )
         }
@@ -66,7 +68,7 @@ fun UserListScreen(activity: ComponentActivity, onNavigateToGuitarList: function
                 hostState = snackBar,
             )
         }, topBar = {
-            TopAppBar(title = { Text(text = "Admin")},
+            TopAppBar(title = { Text(text = stringResource(R.string.admin))},
                 colors = TopAppBarDefaults.mediumTopAppBarColors(MaterialTheme.colorScheme.primary)
         )
     }){innerPadding ->
@@ -94,7 +96,9 @@ fun UserListScreen(activity: ComponentActivity, onNavigateToGuitarList: function
                             Text(modifier = Modifier
                                 .width(200.dp)
                                 .padding(horizontal = 16.dp), text = it.login, fontSize = 20.sp)
-                            Text(modifier = Modifier.padding(horizontal = 8.dp), text = "($numero Instrumentos)", fontSize = 20.sp)
+                            Text(modifier = Modifier.padding(horizontal = 8.dp), text = stringResource(
+                                R.string.instruments, numero
+                            ), fontSize = 20.sp)
                         }
                     }
                 }

@@ -34,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.plg.R
 import com.plg.function
 import com.plg.ui.components.GuitarImage
 import com.plg.ui.theme.PLGTheme
@@ -138,22 +140,25 @@ fun InstrumentDetailsScreen(
                             contentDescription = "warning"
                         )
                     },
-                    title = { Text("Remove Instrument") },
-                    text = { Text(text = "Are you sure you want to remove ${guitar?.name}?") },
+                    title = { Text(stringResource(R.string.remove_instrument)) },
+                    text = { Text(text = stringResource(
+                        R.string.are_you_sure_you_want_to_remove,
+                        guitar?.name!!
+                    )) },
                     onDismissRequest = { },
                     confirmButton = {
                         TextButton(onClick = {
                             navController.popBackStack()
                             globalViewModel.setIfGuitarWasRemoved(true)
                         }) {
-                            Text("Confirm")
+                            Text(stringResource(R.string.confirm))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = {
                             dialogOpen = false
                         }) {
-                            Text("Cancel")
+                            Text(stringResource(R.string.cancel))
                         }
                     }
                 )

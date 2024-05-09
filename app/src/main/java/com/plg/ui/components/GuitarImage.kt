@@ -2,15 +2,31 @@ package com.plg.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.plg.R
 
 
@@ -35,54 +51,37 @@ fun GuitarImage(
     {
         val bodyColorTotal = Brush.radialGradient(
             0.30f to bodyColor1,
-            0.6f to bodyColor2,
-            center = Offset(550f, 1100f),
+            0.5f to bodyColor2,
+            center = Offset(570f, 1200f),
             radius = Float.POSITIVE_INFINITY,
             tileMode = TileMode.Clamp
         )
 
-
-        fun motherOfPearlBrush(): Brush {
-            val colors = arrayOf(
-                0f to Color(0xFFE3FFB6) , // Light green
-               0.15f to Color(0xFFA3FFA3), // Lighter green
-                0.40f to Color(0xFF72CED6), // Light blue
-               0.55f to Color(0xFFAEE5D8), // Lighter blue
-               0.70f to Color(0xFFE6D7F4), // Light purple
-               0.95f to Color(0xFFFAE3CB), // Light orange
-            )
-            return linearGradient(
-                colorStops = colors,
-                start = Offset.Zero,
-                end = Offset(30f, 30f),
-                tileMode = TileMode.Mirror
-            )
-        }
-
-        Image(
-            painter = painterResource(id = body),
-            contentDescription = null,
-            colorFilter = bodyColor1.let { ColorFilter.tint(it) },
-           // modifier = Modifier.background(corCorpoTotal)
-        )
-
-// Usar esta Image para cores complexas no corpo
-
+// Use this Image Composable if the body consists of one plain color.
 //        Image(
-//            painter = painterResource(corpo),
+//            painter = painterResource(id = body),
 //            contentDescription = null,
-//            modifier = Modifier
-//          //       .scale(0.7f)
-////                .offset(x = 52.dp, y = 71.dp)
-//                //.alpha(1f)
-//                .drawWithContent {
-//                    drawContent()
-//                    drawRect(
-//                        brush = SolidColor(Red),
-//                        blendMode = BlendMode.Modulate
-//                    )
-//                }
+//            colorFilter = bodyColor1.let { ColorFilter.tint(it) },
+//           // modifier = Modifier.background(corCorpoTotal)
 //        )
+
+
+// Use this Image Composable for complex colors, like gradient brushes.
+        Image(
+            painter = painterResource(body),
+            contentDescription = null,
+            modifier = Modifier
+                .graphicsLayer {
+                    compositingStrategy = CompositingStrategy.Offscreen
+                }
+                .drawWithContent {
+                    drawContent()
+                    drawRect(
+                        brush = bodyColorTotal,
+                        blendMode = BlendMode.SrcIn
+                    )
+                }
+        )
 
 
         Image(
@@ -102,7 +101,6 @@ fun GuitarImage(
             painterResource(id = headstock),
             contentDescription = null,
             colorFilter = headstockColor?.let { ColorFilter.tint(it) },
-
             )
         Image(
             inlays?.let { painterResource(id = it) }

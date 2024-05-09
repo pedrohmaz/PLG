@@ -3,10 +3,9 @@ package com.plg.ui.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.plg.model.User
+import com.plg.model.remoteServer.RemoteDb
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +14,7 @@ import kotlinx.coroutines.tasks.await
 
 class CreateUserViewModel(application: Application) : AndroidViewModel(application) {
 
-
-    private val remoteDb = Firebase.firestore
+    private val remoteDb = RemoteDb()
 
     private val _userText = MutableStateFlow("")
     val userText: StateFlow<String> get() = _userText
@@ -39,16 +37,14 @@ class CreateUserViewModel(application: Application) : AndroidViewModel(applicati
 
     fun saveUser(user: User) {
         viewModelScope.launch {
-
-            remoteDb.collection("Usuarios").document(user.login)
-                .set(user)
+            remoteDb.saveDocument("Users", user.login, user)
         }
     }
 
-    suspend fun checkNewUser(nome: String): Boolean {
+    suspend fun checkNewUser(name: String): Boolean {
         var user: User? = null
         viewModelScope.async {
-            remoteDb.collection("Usuarios").document(nome).get().addOnSuccessListener {
+            remoteDb.getDocument("Users", name).addOnSuccessListener {
                 user = it.toObject()
             }.await()
         }.await()

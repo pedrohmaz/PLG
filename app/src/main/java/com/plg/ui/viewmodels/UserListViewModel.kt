@@ -22,7 +22,7 @@ class UserListViewModel : ViewModel() {
     val userList: StateFlow<List<User>> get() = _userList
 
     fun updateList() {
-        remoteDb.collection("Usuarios").get().addOnSuccessListener {
+        remoteDb.collection("Users").get().addOnSuccessListener {
             _userList.value = it.toObjects()
         }
     }
@@ -30,7 +30,7 @@ class UserListViewModel : ViewModel() {
     suspend fun countInstruments(user: User): Int {
         var list = emptyList<Guitar>()
         viewModelScope.async {
-                remoteDb.collection("Guitarras").whereEqualTo("usuario", user.login).get().addOnSuccessListener {
+                remoteDb.collection("Guitars").whereEqualTo("user", user.login).get().addOnSuccessListener {
                     list = it.toObjects()
                 }.await()
         }.await()

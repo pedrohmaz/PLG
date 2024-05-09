@@ -1,5 +1,6 @@
 package com.plg.ui.screens
 
+import android.content.Context
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
@@ -38,11 +39,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.plg.R
 import com.plg.isConnected
 import com.plg.model.User
 import com.plg.ui.theme.PLGTheme
@@ -71,7 +74,7 @@ fun CreateUserScreen(activity: ComponentActivity, navController: NavHostControll
         Surface {
             Scaffold(topBar = {
                 TopAppBar(
-                    title = { Text("Create User") },
+                    title = { Text(stringResource(R.string.create_user)) },
                     colors =
                     TopAppBarDefaults.mediumTopAppBarColors
                         (MaterialTheme.colorScheme.primaryContainer)
@@ -86,7 +89,7 @@ fun CreateUserScreen(activity: ComponentActivity, navController: NavHostControll
                 ) {
                     Column(Modifier.padding(48.dp)) {
                         Row {
-                            Text("Nome de Usuário")
+                            Text(stringResource(R.string.user_name))
                             Text(text = nameAsterisk, color = Red)
                         }
                         TextField(
@@ -97,7 +100,7 @@ fun CreateUserScreen(activity: ComponentActivity, navController: NavHostControll
                         )
                         Spacer(Modifier.height(32.dp))
                         Row {
-                            Text("Password")
+                            Text(stringResource(R.string.password))
                             Text(text = passwordAsterisk, color = Red)
                         }
                         TextField(
@@ -106,9 +109,7 @@ fun CreateUserScreen(activity: ComponentActivity, navController: NavHostControll
                                 Text(
                                     modifier = Modifier.offset(x = (-16).dp),
                                     text =
-                                    "The password must have" +
-                                            " between 6 and 12 characters, at least one" +
-                                            " number and one uppercase letter.",
+                                    stringResource(R.string.the_password_must_have),
                                     color = supportingPasswordColor
                                 )
                             },
@@ -138,7 +139,7 @@ fun CreateUserScreen(activity: ComponentActivity, navController: NavHostControll
                                                 viewModel.resetState()
                                                 Toast.makeText(
                                                     activity,
-                                                    "User created successfully",
+                                                    R.string.user_created_successfully,
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             } else {
@@ -149,15 +150,15 @@ fun CreateUserScreen(activity: ComponentActivity, navController: NavHostControll
                                         } else {
                                             keyboardController?.hide()
                                             viewModel.showAuxText(
-                                                "Username already" +
-                                                        " exists. Please choose another one."
+                                               activity.getString(R.string.username_already_exists_please_choose_another_one)
                                             )
                                             nameAsterisk = "*"
                                         }
-                                    } else Toast.makeText(activity, "Could not create user. Internet unavailable.", Toast.LENGTH_SHORT).show()
+                                    } else Toast.makeText(activity,
+                                       R.string.could_not_create_user_internet_unavailable, Toast.LENGTH_SHORT).show()
                                 }
                             }) {
-                            Text("Create User")
+                            Text(stringResource(R.string.create_user))
                         }
                         Text(
                             modifier = Modifier.offset(x = (-8).dp, y = 16.dp),

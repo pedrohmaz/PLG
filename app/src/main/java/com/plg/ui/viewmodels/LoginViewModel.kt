@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObjects
+import com.plg.R
 import com.plg.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +39,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     suspend fun getUserId(name: String): String {
         var id = ""
-        remoteDb.collection("Usuarios").document(name).get().addOnSuccessListener {
+        remoteDb.collection("Users").document(name).get().addOnSuccessListener {
             id = it.id
         }.await()
         return id
@@ -50,14 +51,14 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         context: Context,
         callback: (Boolean) -> Unit
     ) {
-        remoteDb.collection("Usuarios").whereEqualTo("login", name).whereEqualTo("senha", password)
+        remoteDb.collection("Users").whereEqualTo("login", name).whereEqualTo("password", password)
             .get().addOnSuccessListener {
                 val users: List<User> = it.toObjects()
                 callback(users.isNotEmpty())
             }.addOnFailureListener {
                 Toast.makeText(
                     context,
-                    "Não foi possível acessar o servidor.",
+                    R.string.could_not_access_server,
                     Toast.LENGTH_SHORT
                 ).show()
                 callback(false)

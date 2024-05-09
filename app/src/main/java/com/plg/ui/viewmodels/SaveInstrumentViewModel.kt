@@ -20,14 +20,14 @@ class SaveInstrumentViewModel(application: Application) : AndroidViewModel(appli
 
     fun saveGuitar(guitar: Guitar) {
         viewModelScope.launch {
-            remoteDb.collection("Guitarras").add(guitar)
+            remoteDb.collection("Guitars").add(guitar)
         }
     }
 
     suspend fun updateGuitar(guitar: Guitar) {
-        val query = remoteDb.collection("Guitarras").whereEqualTo("id", guitar.id).get().await()
+        val query = remoteDb.collection("Guitars").whereEqualTo("id", guitar.id).get().await()
         val docRef = query.first()
-        remoteDb.collection("Guitarras").document(docRef.id).set(guitar)
+        remoteDb.collection("Guitars").document(docRef.id).set(guitar)
     }
 
     fun changeText(text: String?) {

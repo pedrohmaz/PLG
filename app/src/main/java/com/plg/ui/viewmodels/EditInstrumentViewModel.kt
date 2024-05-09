@@ -9,6 +9,7 @@ import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.plg.R
 import com.plg.model.Guitar
+import com.plg.model.remoteServer.RemoteDb
 import com.plg.ui.components.ButtonSelected
 import com.plg.ui.theme.RedBodyColor
 import com.plg.ui.theme.DarkScaleColor
@@ -21,7 +22,7 @@ import kotlinx.coroutines.tasks.await
 
 class EditInstrumentViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val remoteDb = Firebase.firestore
+    private val remoteDb = RemoteDb()
 
     private val _guitar = MutableStateFlow<Guitar?>(null)
     val guitar: StateFlow<Guitar?> get() = _guitar
@@ -117,6 +118,7 @@ class EditInstrumentViewModel(application: Application) : AndroidViewModel(appli
 
     private fun changeBodyColor(color: Color, color2: Color, value: Float) {
         _bodyColor1.value = color
+        _bodyColor2.value = color2
     }
 
     private fun changeShieldColor(color: Color, color2: Color, value: Float) {
@@ -212,7 +214,7 @@ class EditInstrumentViewModel(application: Application) : AndroidViewModel(appli
 
     suspend fun setGuitar(id: Long) {
         viewModelScope.async {
-            remoteDb.collection("Guitarras").whereEqualTo("id", id).get().addOnSuccessListener {
+            remoteDb.getElementByParam("Guitars","id", id).addOnSuccessListener {
                 _guitar.value = it.first().toObject()
             }.await()
         }.await()

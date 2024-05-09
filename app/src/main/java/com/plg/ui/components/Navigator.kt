@@ -28,35 +28,35 @@ fun Navigator(activity: ComponentActivity) {
             LoginScreen(activity = activity,
                 onNavigateToCustomizeInstrument =
                 {
-                    navController.navigate("customizarInstrumento")
+                    navController.navigate("customizeInstrument")
                 },
                 onNavigateToCreateUser =
                 {
-                    navController.navigate("criarUsuario")
+                    navController.navigate("createUser")
                 },
                 onNavigateToUserList = {
-                    navController.navigate("listaUsuarios")
+                    navController.navigate("userList")
                 }
             )
         }
-        composable("criarUsuario") {
+        composable("createUser") {
             CreateUserScreen(
                 activity = activity,
                 navController = navController
             )
         }
-        composable("customizarInstrumento") {
+        composable("customizeInstrument") {
             CustomizeInstrumentScreen(
                 activity,
-                onNavigateToGuitar = { navController.navigate("listaGuitarras") },
+                onNavigateToGuitar = { navController.navigate("guitarList") },
                 onNavigateToSaveInstrument = { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s ->
                     navController.navigate(
-                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r/$s"
+                        "saveInstrument/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r/$s"
                     )
                 })
         }
         composable(
-            "salvarInstrumento/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}/{j}/{k}/{l}/{m}/{n}/{o}/{p}/{q}/{r}/{s}",
+            "saveInstrument/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}/{j}/{k}/{l}/{m}/{n}/{o}/{p}/{q}/{r}/{s}",
             arguments = listOf(
                 navArgument("a") { type = NavType.IntType },
                 navArgument("b") { type = NavType.IntType },
@@ -104,7 +104,7 @@ fun Navigator(activity: ComponentActivity) {
                 navController = navController,
                 onNavigateToGuitarList = {
                     navController.popBackStack()
-                    navController.navigate("listaGuitarras")
+                    navController.navigate("guitarList")
                 },
                 a = a,
                 b = b,
@@ -128,17 +128,17 @@ fun Navigator(activity: ComponentActivity) {
             )
         }
 
-        composable("listaGuitarras") {
+        composable("guitarList") {
             GuitarListScreen(activity = activity,
                 onNavigateToInstrumentDetails = { id ->
-                    navController.navigate("detalhesInstrumento/$id")
+                    navController.navigate("instrumentDetails/$id")
                 },
-                onNavigateToCustomizeInstrument = {navController.navigate("customizarInstrumento")}
+                onNavigateToCustomizeInstrument = {navController.navigate("customizeInstrument")}
             )
         }
 
         composable(
-            "detalhesInstrumento/{id}",
+            "instrumentDetails/{id}",
             arguments = listOf(navArgument("id") { type = NavType.LongType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getLong("id") ?: 0
@@ -147,23 +147,23 @@ fun Navigator(activity: ComponentActivity) {
                 navController,
                 guitarId = id,
                 onNavigateToEditInstrument = {
-                    navController.navigate("editarInstrumento")
+                    navController.navigate("editInstrument")
                 })
         }
 
-        composable("editarInstrumento") {
+        composable("editInstrument") {
             EditInstrumentScreen(
                 activity = activity,
                 onNavigateToSaveInstrument = { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s ->
                     navController.navigate(
-                        "salvarInstrumento/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r/$s"
+                        "saveInstrument/$a/$b/$c/$d/$e/$f/$g/$h/$i/$j/$k/$l/$m/$n/$o/$p/$q/$r/$s"
                     )
                 })
         }
 
-        composable("listaUsuarios"){
+        composable("userList"){
             UserListScreen(activity = activity,
-                onNavigateToGuitarList = {navController.navigate("listaGuitarras")})
+                onNavigateToGuitarList = {navController.navigate("guitarList")})
         }
 
     }

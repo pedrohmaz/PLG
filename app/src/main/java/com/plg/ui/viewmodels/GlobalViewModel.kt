@@ -32,7 +32,7 @@ class GlobalViewModel : ViewModel() {
         viewModelScope.async {
             remoteDb.collection("Id").document("id").get().addOnSuccessListener {
                 if (!it.exists()) {
-                    val data = hashMapOf<String, Long>("valor" to 0)
+                    val data = hashMapOf<String, Long>("value" to 0)
                     remoteDb.collection("Id").document("id").set(data)
                 } else {
                     val oldValue = it.getLong("valor") ?: 0

@@ -33,10 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.LightGray
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.plg.R
 import com.plg.formatToReal
 import com.plg.function
 import com.plg.model.Guitar
@@ -75,7 +77,7 @@ fun SaveInstrumentScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Save Instrument") },
+                    title = { Text(stringResource(R.string.save_instrument)) },
                     colors = TopAppBarDefaults.smallTopAppBarColors
                         (MaterialTheme.colorScheme.primary)
                 )
@@ -96,7 +98,7 @@ fun SaveInstrumentScreen(
 
 
                     Text(
-                        text = "Give this instrument a name:",
+                        text = stringResource(R.string.give_this_instrument_a_name),
                         fontSize = 18.sp
                     )
                     OutlinedTextField(
@@ -128,7 +130,7 @@ fun SaveInstrumentScreen(
 
                     )
                     Text(
-                        text = "Final value: ${formatToReal(m)}",
+                        text = stringResource(R.string.final_value, formatToReal(m)),
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
@@ -142,7 +144,7 @@ fun SaveInstrumentScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Button(onClick = { navController.popBackStack() }) {
-                            Text(text = "Back")
+                            Text(text = stringResource(R.string.back))
                         }
                         Button(onClick = {
                             coroutineScope.launch {
@@ -150,7 +152,7 @@ fun SaveInstrumentScreen(
                                 val id: Long =
                                     if (updatingGuitar) globalViewModel.guitarId.value
                                     else globalViewModel.setId()
-                                if (nome.isBlank()) nome = "My Guitar"
+                                if (nome.isBlank()) nome = activity.getString(R.string.my_guitar)
                                 val guitar = Guitar(
                                     a,
                                     b,
@@ -175,7 +177,8 @@ fun SaveInstrumentScreen(
                                 )
                                 if (!updatingGuitar) {
                                     viewModel.saveGuitar(guitar)
-                                    Toast.makeText(activity, "Guitar saved.", Toast.LENGTH_SHORT)
+                                    Toast.makeText(activity,
+                                        R.string.guitar_saved, Toast.LENGTH_SHORT)
                                         .show()
                                 } else {
                                     viewModel.updateGuitar(guitar)
@@ -184,7 +187,7 @@ fun SaveInstrumentScreen(
                                 onNavigateToGuitarList()
                             }
                         }) {
-                            Text(text = "Save")
+                            Text(text = stringResource(R.string.save))
                         }
                     }
 

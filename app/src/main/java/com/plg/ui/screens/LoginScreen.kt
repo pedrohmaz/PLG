@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -80,7 +81,7 @@ fun LoginScreen(
                 topBar = {
                     TopAppBar(
                         {
-                            Text(text = "Login")
+                            Text(text = stringResource(R.string.login))
                         }, colors =
                         TopAppBarDefaults.mediumTopAppBarColors(colorScheme.primaryContainer)
                     )
@@ -107,7 +108,7 @@ fun LoginScreen(
                             onValueChange = {
                                 viewModel.typeUser(it)
                             },
-                            label = { Text("User") },
+                            label = { Text(stringResource(R.string.user)) },
                             singleLine = true,
                             leadingIcon = {
                                 Icon(
@@ -124,7 +125,7 @@ fun LoginScreen(
                             onValueChange = {
                                 viewModel.typePassword(it)
                             },
-                            label = { Text("Password") },
+                            label = { Text(stringResource(id = R.string.password)) },
                             singleLine = true,
                             visualTransformation = if (showPassword.value) VisualTransformation.None
                             else PasswordVisualTransformation(),
@@ -141,7 +142,7 @@ fun LoginScreen(
                             }
                         )
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("Show password", fontSize = 15.sp)
+                            Text(stringResource(R.string.show_password), fontSize = 15.sp)
                             Checkbox(
                                 checked = showPassword.value,
                                 onCheckedChange = { viewModel.clickShowPassword() },
@@ -171,7 +172,7 @@ fun LoginScreen(
                                                 }else {
                                                     Toast.makeText(
                                                         activity,
-                                                        "Wrong user or password.",
+                                                        R.string.wrong_user_or_password,
                                                         Toast.LENGTH_SHORT
                                                     ).show()
                                                 }
@@ -181,7 +182,7 @@ fun LoginScreen(
                                 }
                             })
                         {
-                            Text("Enter")
+                            Text(stringResource(R.string.enter))
                         }
                     }
                     FloatingActionButton(
@@ -197,7 +198,7 @@ fun LoginScreen(
                                 imageVector = Icons.Sharp.Add,
                                 contentDescription = "add icon"
                             )
-                            Text("Create User")
+                            Text(stringResource(id = R.string.create_user))
                         }
                     }
                 }

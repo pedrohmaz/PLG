@@ -74,7 +74,6 @@ fun EditInstrumentScreen(
 
     LaunchedEffect(Unit) {
         viewModel.setGuitar(guitarId)
-        Log.i("TAG", "EditarInstrumentoScreen: ")
         guitar?.let { guitarra ->
             viewModel.setInitialDrawing(
                 guitarra.body,
@@ -203,7 +202,6 @@ fun EditInstrumentScreen(
                         .padding(16.dp),
                     onClick = {
                         globalViewModel.setUpdatingGuitar(true)
-                        Log.i("Treta", "EditarInstrumentoScreen: ${globalViewModel.updatingGuitar.value}")
                         onNavigateToSaveInstrument(
                             body.value,
                             neck.value,

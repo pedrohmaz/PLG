@@ -21,7 +21,7 @@ class GuitarListViewModel(application: Application) : AndroidViewModel(applicati
     val guitarList: StateFlow<List<Guitar>> get() = _guitarList
     fun updateList(id: String) {
         viewModelScope.launch {
-            remoteDb.collection("Guitarras").whereEqualTo("usuario", id)
+            remoteDb.collection("Guitars").whereEqualTo("user", id)
                 .get().addOnSuccessListener {
                     _guitarList.value = it.toObjects()
                 }
@@ -30,22 +30,22 @@ class GuitarListViewModel(application: Application) : AndroidViewModel(applicati
 
     fun saveGuitar(guitar: Guitar) {
         viewModelScope.launch {
-            remoteDb.collection("Guitarras").add(guitar)
+            remoteDb.collection("Guitars").add(guitar)
         }
     }
 
     fun removeGuitar(id: Long) {
         viewModelScope.launch {
-           val query = remoteDb.collection("Guitarras").whereEqualTo("id", id).get().await()
+           val query = remoteDb.collection("Guitars").whereEqualTo("id", id).get().await()
            val docRef = query.first()
-           remoteDb.collection("Guitarras").document(docRef.id).delete()
+           remoteDb.collection("Guitars").document(docRef.id).delete()
         }
     }
 
     suspend fun searchGuitarById(id: Long): Guitar? {
         var guitar: Guitar? = null
         viewModelScope.async {
-            remoteDb.collection("Guitarras").whereEqualTo("id", id).get().addOnSuccessListener {
+            remoteDb.collection("Guitars").whereEqualTo("id", id).get().addOnSuccessListener {
                 guitar = it.first().toObject()
             }.await()
         }.await()

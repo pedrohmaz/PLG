@@ -43,8 +43,10 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.plg.R
 import com.plg.formatToReal
 import com.plg.function
 import com.plg.ui.components.GuitarImage
@@ -76,8 +78,8 @@ fun GuitarListScreen(
             if (guitar != null) {
                 viewModel.removeGuitar(guitar.id)
                 val result = snackBar.showSnackbar(
-                    message = "Instrument ${guitar.name} removed.",
-                    actionLabel = "Undo",
+                    message = activity.getString(R.string.instrument_removed, guitar.name),
+                    actionLabel = activity.getString(R.string.undo),
                     withDismissAction = true,
                     duration = SnackbarDuration.Long
                 )
@@ -152,7 +154,10 @@ fun GuitarListScreen(
                                 {
                                     Text(it.name, fontSize = 18.sp)
                                     Text(
-                                        text = "Value: ${formatToReal(it.value)}",
+                                        text = stringResource(
+                                            R.string.value,
+                                            formatToReal(it.value)
+                                        ),
                                         fontSize = 16.sp
                                     )
                                 }
@@ -166,7 +171,7 @@ fun GuitarListScreen(
                     onClick = { onNavigateToCustomizeInstrument() }) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = "New Instrument"
+                        contentDescription = stringResource(R.string.new_instrument)
                     )
                 }
             }
