@@ -37,16 +37,16 @@ class CreateUserViewModel(application: Application) : AndroidViewModel(applicati
 
     fun saveUser(user: User) {
         viewModelScope.launch {
-            remoteDb.saveDocument("Users", user.login, user)
+            remoteDb.setDocument("Users", user.login, user)
         }
     }
 
     suspend fun checkNewUser(name: String): Boolean {
         var user: User? = null
         viewModelScope.async {
-            remoteDb.getDocument("Users", name).addOnSuccessListener {
+            remoteDb.getDocument("Users", name)?.addOnSuccessListener {
                 user = it.toObject()
-            }.await()
+            }?.await()
         }.await()
         return user == null
     }

@@ -3,11 +3,10 @@ package com.plg.ui.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.plg.model.Guitar
+import com.plg.model.remoteServer.RemoteDb
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,13 +15,14 @@ import kotlinx.coroutines.tasks.await
 
 class GuitarListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val remoteDb = Firebase.firestore
+
+    private val remoteDb = RemoteDb()
+
     private val _guitarList = MutableStateFlow<List<Guitar>>(emptyList())
     val guitarList: StateFlow<List<Guitar>> get() = _guitarList
     fun updateList(id: String) {
         viewModelScope.launch {
-            remoteDb.collection("Guitars").whereEqualTo("user", id)
-                .get().addOnSuccessListener {
+            remoteDb.getElementByParam("Guitars", "user", id)?.addOnSuccessListener {
                     _guitarList.value = it.toObjects()
                 }
         }
@@ -30,24 +30,24 @@ class GuitarListViewModel(application: Application) : AndroidViewModel(applicati
 
     fun saveGuitar(guitar: Guitar) {
         viewModelScope.launch {
-            remoteDb.collection("Guitars").add(guitar)
+            remoteDb.addDocument("Guitars", guitar)
         }
     }
 
     fun removeGuitar(id: Long) {
         viewModelScope.launch {
-           val query = remoteDb.collection("Guitars").whereEqualTo("id", id).get().await()
-           val docRef = query.first()
-           remoteDb.collection("Guitars").document(docRef.id).delete()
+           val query = remoteDb.getElementByParam("Guitars", "id", id)?.await()
+           val docRef = query?.first()
+            docRef?.id?.let { remoteDb.removeDocument("Guitars", it) }
         }
     }
 
     suspend fun searchGuitarById(id: Long): Guitar? {
         var guitar: Guitar? = null
         viewModelScope.async {
-            remoteDb.collection("Guitars").whereEqualTo("id", id).get().addOnSuccessListener {
+            remoteDb.getElementByParam("Guitars","id", id)?.addOnSuccessListener {
                 guitar = it.first().toObject()
-            }.await()
+            }?.await()
         }.await()
         return guitar
     }

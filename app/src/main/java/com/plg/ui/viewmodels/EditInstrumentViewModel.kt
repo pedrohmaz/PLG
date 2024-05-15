@@ -28,17 +28,17 @@ class EditInstrumentViewModel(application: Application) : AndroidViewModel(appli
     val guitar: StateFlow<Guitar?> get() = _guitar
 
 
-    private val _body = MutableStateFlow(R.drawable.strato_corpo)
+    private val _body = MutableStateFlow(R.drawable.transparente)
     val body: StateFlow<Int> get() = _body
-    private val _neck = MutableStateFlow(R.drawable.strato_braco)
+    private val _neck = MutableStateFlow(R.drawable.transparente)
     val neck: StateFlow<Int> get() = _neck
-    private val _headstock = MutableStateFlow(R.drawable.strato_headstock)
+    private val _headstock = MutableStateFlow(R.drawable.transparente)
     val headstock: StateFlow<Int> get() = _headstock
-    private val _shield = MutableStateFlow(R.drawable.strato_escudo)
+    private val _shield = MutableStateFlow(R.drawable.transparente)
     val shield: StateFlow<Int> get() = _shield
-    private val _inlays = MutableStateFlow(R.drawable.strato_marcacoes)
+    private val _inlays = MutableStateFlow(R.drawable.transparente)
     val inlays: StateFlow<Int> get() = _inlays
-    private val _pieces = MutableStateFlow(R.drawable.strato_pecas)
+    private val _pieces = MutableStateFlow(R.drawable.transparente)
     val pieces: StateFlow<Int> get() = _pieces
     private val _bodyColor1 = MutableStateFlow(RedBodyColor)
     val bodyColor1: StateFlow<Color> get() = _bodyColor1
@@ -214,9 +214,9 @@ class EditInstrumentViewModel(application: Application) : AndroidViewModel(appli
 
     suspend fun setGuitar(id: Long) {
         viewModelScope.async {
-            remoteDb.getElementByParam("Guitars","id", id).addOnSuccessListener {
+            remoteDb.getElementByParam("Guitars","id", id)?.addOnSuccessListener {
                 _guitar.value = it.first().toObject()
-            }.await()
+            }?.await()
         }.await()
     }
 

@@ -7,6 +7,7 @@ import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObjects
 import com.plg.model.Guitar
 import com.plg.model.User
+import com.plg.model.remoteServer.RemoteDb
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,7 @@ import kotlinx.coroutines.tasks.await
 
 class UserListViewModel : ViewModel() {
 
-    private val remoteDb = Firebase.firestore
+    private val remoteDb = RemoteDb()
 
     private val _userList = MutableStateFlow<List<User>>(
         emptyList()
@@ -22,7 +23,7 @@ class UserListViewModel : ViewModel() {
     val userList: StateFlow<List<User>> get() = _userList
 
     fun updateList() {
-        remoteDb.collection("Users").get().addOnSuccessListener {
+        remoteDb.getCollection("Users")?.addOnSuccessListener {
             _userList.value = it.toObjects()
         }
     }
@@ -30,9 +31,9 @@ class UserListViewModel : ViewModel() {
     suspend fun countInstruments(user: User): Int {
         var list = emptyList<Guitar>()
         viewModelScope.async {
-                remoteDb.collection("Guitars").whereEqualTo("user", user.login).get().addOnSuccessListener {
+                remoteDb.getElementByParam("Guitars","user", user.login)?.addOnSuccessListener {
                     list = it.toObjects()
-                }.await()
+                }?.await()
         }.await()
         return list.size
     }

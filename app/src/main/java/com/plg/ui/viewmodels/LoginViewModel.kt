@@ -9,13 +9,14 @@ import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObjects
 import com.plg.R
 import com.plg.model.User
+import com.plg.model.remoteServer.RemoteDb
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val remoteDb = Firebase.firestore
+    private val remoteDb = RemoteDb()
 
     private val _userText = MutableStateFlow("")
     val userText: StateFlow<String> get() = _userText
@@ -37,25 +38,17 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         _showPassword.value = !_showPassword.value
     }
 
-    suspend fun getUserId(name: String): String {
-        var id = ""
-        remoteDb.collection("Users").document(name).get().addOnSuccessListener {
-            id = it.id
-        }.await()
-        return id
-    }
-
     fun autenticateLogin(
         name: String,
         password: String,
         context: Context,
         callback: (Boolean) -> Unit
     ) {
-        remoteDb.collection("Users").whereEqualTo("login", name).whereEqualTo("password", password)
-            .get().addOnSuccessListener {
+        remoteDb.getElementByParam("Users","login", name, "password", password)
+            ?.addOnSuccessListener {
                 val users: List<User> = it.toObjects()
                 callback(users.isNotEmpty())
-            }.addOnFailureListener {
+            }?.addOnFailureListener {
                 Toast.makeText(
                     context,
                     R.string.could_not_access_server,

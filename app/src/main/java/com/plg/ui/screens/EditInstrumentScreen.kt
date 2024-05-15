@@ -1,7 +1,6 @@
 package com.plg.ui.screens
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.compose.foundation.gestures.rememberTransformableState
@@ -129,7 +128,7 @@ fun EditInstrumentScreen(
     val neckColor = viewModel.neckColor.collectAsState()
     val headstockColor = viewModel.headstockColor.collectAsState()
     val inlaysColor = viewModel.inlaysColor.collectAsState()
-    val shieldCOlor = viewModel.shieldColor.collectAsState()
+    val shieldColor = viewModel.shieldColor.collectAsState()
     val value by viewModel.totalValue.collectAsState()
 
     val configuration = LocalConfiguration.current
@@ -173,7 +172,7 @@ fun EditInstrumentScreen(
                     bodyColor2.value,
                     neckColor.value,
                     headstockColor.value,
-                    shieldCOlor.value,
+                    shieldColor.value,
                     inlaysColor.value,
                     modifier = Modifier
                         .scale(if (isHorizontal) 1.5f else 1.1f)
@@ -213,7 +212,7 @@ fun EditInstrumentScreen(
                             bodyColor2.value.toArgb(),
                             neckColor.value.toArgb(),
                             headstockColor.value.toArgb(),
-                            shieldCOlor.value.toArgb(),
+                            shieldColor.value.toArgb(),
                             inlaysColor.value.toArgb(),
                             value,
                             viewModel.getValue(viewModel.modelValue),
